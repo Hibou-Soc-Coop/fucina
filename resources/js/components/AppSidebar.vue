@@ -2,20 +2,14 @@
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-} from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import museums from '@/routes/museums';
+import languagesRoutes from '@/routes/languages';
+import mediaRoutes from '@/routes/media';
+import museumsRoutes from '@/routes/museums';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Landmark } from 'lucide-vue-next';
+import { Folder, Landmark, LayoutGrid } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -26,23 +20,25 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Musei',
-        href: museums.index(),
+        href: museumsRoutes.index(),
         icon: Landmark,
     },
 ];
 
-const footerNavItems: NavItem[] = [
+const settingNavItems: NavItem[] = [
     {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
+        title: 'Gestisci lingue',
+        href: languagesRoutes.index(),
         icon: Folder,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
+        title: 'Gestisci media',
+        href: mediaRoutes.index(),
+        icon: Folder,
     },
 ];
+
+const footerNavItems: NavItem[] = [];
 </script>
 
 <template>
@@ -59,8 +55,9 @@ const footerNavItems: NavItem[] = [
             </SidebarMenu>
         </SidebarHeader>
 
-        <SidebarContent>
-            <NavMain :items="mainNavItems" />
+        <SidebarContent class="justify-between">
+            <NavMain label="Contenuti" :items="mainNavItems" />
+            <NavMain label="Impostazioni" :items="settingNavItems" />
         </SidebarContent>
 
         <SidebarFooter>

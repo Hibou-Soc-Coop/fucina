@@ -5,6 +5,9 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { initializeTheme } from './composables/useAppearance';
+import ElementPlus from 'element-plus';
+import ElementTiptapPlugin from 'element-tiptap';
+import 'element-tiptap/lib/style.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -18,6 +21,8 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(ElementPlus)
+            .use(ElementTiptapPlugin)
             .mount(el);
     },
     progress: {

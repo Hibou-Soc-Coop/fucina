@@ -25,7 +25,9 @@ Route::prefix('backend')->group(function () {
 Route::get('/museum', function () {
     return Inertia::render('frontend/Museums/Index');
 })->name('museum.index');
-
+Route::get('/collection', function(){
+    return Inertia::render('frontend/Collections/Index');
+})->name('collection.index');
 
 
 require __DIR__ . '/settings.php';

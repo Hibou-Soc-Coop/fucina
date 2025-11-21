@@ -174,6 +174,27 @@ class MuseumController extends Controller
      */
     public function edit(string $id)
     {
+        $museumRecord = Museum::findOrFail($id);
+
+        $museumId = $museumRecord->id;
+        $museumName = $museumRecord->getTranslations('name');
+        $museumDescription = $museumRecord->getTranslations('description');
+        $museumLogo = $museumRecord->logo;
+        $museumAudio = $museumRecord->audio;
+        $museumImages = $museumRecord->images;
+
+        $museumData = [
+            'id' => $museumId,
+            'name' => $museumName,
+            'description' => $museumDescription,
+            'logo' => $museumLogo,
+            'audio' => $museumAudio,
+            'images' => $museumImages,
+        ];
+
+        return Inertia::render('backend/Museums/Edit', [
+            'museum' => $museumData,
+        ]);
 
     }
 

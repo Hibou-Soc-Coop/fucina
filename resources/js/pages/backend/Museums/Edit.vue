@@ -10,14 +10,14 @@ import { MuseumData, type Language } from '@/types/flexhibition';
 import { Head, router, usePage } from '@inertiajs/vue3';
 
 const props = defineProps<{ museum: MuseumData }>();
-console.log("Museum Props:", props.museum);
+
 const page = usePage();
 const languages = page.props.languages as Language[];
 const primaryLanguage = page.props.primaryLanguage as Language;
 console.log("Languages:", primaryLanguage);
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Museo', href: museumRoutes.index().url },
-    { title: 'Dettaglio', href: '#' },
+    { title: 'Modifica', href: '#' },
 ];
 
 const deleteMuseum = () => {
@@ -32,8 +32,8 @@ const deleteMuseum = () => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <PageLayout title="Dettaglio Museo">
             <template #button>
-                <Button @click="router.visit(museumRoutes.edit.url(props.museum.id))" color-scheme="edit" class="mr-2">
-                    Modifica Museo
+                <Button :href="museumRoutes.edit.url(props.museum.id)" color-scheme="create" class="mr-2">
+                    Salva Modifiche
                 </Button>
                 <Button @click="deleteMuseum" color-scheme="delete">
                     Elimina Museo

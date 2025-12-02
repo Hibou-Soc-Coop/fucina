@@ -6,7 +6,6 @@ import  Button from '@/components/hibou/Button.vue';
 import { type BreadcrumbItem } from '@/types';
 import { type Language, ExhibitionData } from '@/types/flexhibition';
 import Card from '@/components/hibou/Card.vue';
-
 import exhibitionsRoutes from '@/routes/exhibitions';
 
 const page = usePage();
@@ -18,7 +17,7 @@ const props = defineProps<{ exhibitions: ExhibitionData[] }>();
 console.log('Exhibition: ', props.exhibitions);
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Collections',
+        title: 'Exhibitions',
         href: '#',
     },
 ];
@@ -34,7 +33,7 @@ function truncate(text: string | undefined, maxLength: number): string {
 
 <template>
 
-    <Head title="Collections" />
+    <Head title="Exhibitions" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="mx-auto px-4 sm:px-6 lg:px-8 py-8 container">
             <div class="flex items-center mb-4">

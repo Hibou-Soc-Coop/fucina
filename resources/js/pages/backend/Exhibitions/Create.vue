@@ -6,19 +6,20 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import PageLayout from '@/layouts/PageLayout.vue';
 import exhibitionsRoutes from '@/routes/exhibitions';
 import { type BreadcrumbItem } from '@/types';
-import { type Language, MediaData } from '@/types/flexhibition';
+import { type Language, MediaData, MuseumData } from '@/types/flexhibition';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 
 import MultipleMediaUploader from '@/components/hibou/MultipleMediaUploader.vue';
 import SingleMediaUpload from '@/components/hibou/SingleMediaUpload.vue';
 import TipTap from '@/components/hibou/TipTap.vue';
 import Button from '@/components/hibou/Button.vue';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 
 const page = usePage();
 const languages = page.props.languages as Language[];
 const primaryLanguage = page.props.primaryLanguage as Language | null;
 const primaryLanguageCode = primaryLanguage?.code || 'it';
-
+const museums = defineProps<{ museums: MuseumData }>();
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Exhibitions',
@@ -37,8 +38,11 @@ const form = useForm({
     name: { ...emptyByLanguage },
     caption: { ...emptyByLanguage },
     description: { ...emptyByLanguage },
+    startDate: '',
+    endDate: '',
     audio: null as MediaData | null,
     images: [] as MediaData[],
+    museum_id: null as number | null,
     processing: false,
 });
 
@@ -53,7 +57,7 @@ function submit() {
 </script>
 
 <template>
-    <Head title="Collections" />
+    <Head title="Exhibitions" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <PageLayout title="Aggiungi Collezione">
             <form @submit.prevent="submit">
@@ -61,6 +65,12 @@ function submit() {
                     <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">
                         <Label class="block text-lg font-semibold"> Audio Collezione </Label>
                         <SingleMediaUpload v-model="form.audio" :is-readonly="false" :accept="'audio/*'" :max-file-size="10 * 1024 * 1024" />
+                    </div>
+                    <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">
+                        <Label class="block text-lg font-semibold"> Data d'inizio </Label>
+                        <Input class="mb-4" v-model="form.startDate" type="date" />
+                        <Label class="block text-lg font-semibold"> Data di fine </Label>
+                        <Input class="mb-4" v-model="form.endDate" type="date" />
                     </div>
                     <div class="col-start-2 col-end-3 row-start-1 row-end-3 rounded-lg border p-4 shadow">
                         <h2 class="mb-4 text-lg font-semibold">Informazioni Collezione</h2>
@@ -80,6 +90,15 @@ function submit() {
                                 <div class="mb-4">
                                     <TipTap v-model="form.description[language.code]" />
                                 </div>
+                                <Label class="mb-1 font-semibold">Museum</Label>
+                                <Select class="mb-4" v-model="form.museum_id">
+                                    <SelectTrigger>
+                                            <SelectValue placeholder="Seleziona museo" />
+                                        </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="museum in museums" :key="museum.id" :value="museum.id">{{ museum.name[language.code] }}</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </TabsContent>
                         </Tabs>
                     </div>
@@ -88,7 +107,6 @@ function submit() {
                         <MultipleMediaUploader v-model="form.images" :is-readonly="false" :show-caption="false" :primary="true" />
                     </div>
                 </div>
-
                 <div class="mt-4">
                     <Button type="submit" :disabled="form.processing">Crea Collezione</Button>
                 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Exhibition;
 use App\Models\Media;
+use App\Models\Museum;
 use App\Helpers\LanguageHelper;
 use App\Http\Requests\StoreExhibitionRequest;
 use App\Http\Requests\UpdateExhibitionRequest;
@@ -65,7 +66,20 @@ class ExhibitionController extends Controller
      */
     public function create()
     {
-        return Inertia::render('backend/Exhibitions/Create', []);
+        $primaryLanguage = LanguageHelper::getPrimaryLanguage();
+        $museums = Museum::all();
+        $museumsData = [];
+        foreach ($museums as $museum) {
+            $museumData = [];
+            $museumData['id'] = $museum->id;
+            $museumData['name'] = [
+                $primaryLanguage->code => $museum->getTranslation('name', $primaryLanguage->code),
+            ];
+            $museumsData[] = $museumData;
+        }
+        return Inertia::render('backend/Exhibitions/Create', [
+            'museums' => $museumsData,
+        ]);
     }
     /**
      * Store a newly created resource in storage.
@@ -92,14 +106,13 @@ class ExhibitionController extends Controller
 
             // Create the exhibition
             $exhibition = Exhibition::create([
-                'museum_id' => $data['museum_id'] ?? null,
                 'name' => $data['name'],
                 'description' => $data['description'] ?? [],
-                'credits' => $data['credits'] ?? [],
                 'audio_id' => $exhibitionAudio?->id,
                 'start_date' => $data['start_date'] ?? null,
                 'end_date' => $data['end_date'] ?? null,
-                'is_archived' => $data['is_archived'] ?? false,
+                'is_archived' =>  false,
+                'museum_id' => $data['museum_id'] ?? null,
             ]);
 
             // Handle images

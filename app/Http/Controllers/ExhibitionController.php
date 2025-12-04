@@ -99,8 +99,8 @@ class ExhibitionController extends Controller
                 'name' => $data['name'],
                 'description' => $data['description'] ?? [],
                 'audio_id' => $audioId,
-                'start_date' => $data['start_date'] ?? null,
-                'end_date' => $data['end_date'] ?? null,
+                'start_date' => (!empty($data['start_date']) && $data['start_date'] !== '') ? $data['start_date'] : null,
+                'end_date' => (!empty($data['end_date']) && $data['end_date'] !== '') ? $data['end_date'] : null,
                 'is_archived' =>  false,
                 'museum_id' => $data['museum_id'] ?? null,
             ]);
@@ -153,6 +153,7 @@ class ExhibitionController extends Controller
     }
 
     public function edit($id){
+        $primaryLanguage = LanguageHelper::getPrimaryLanguage();
         $exhibitionRecord = Exhibition::findOrFail($id);
         $museumRecord = Museum::find($exhibitionRecord->museum_id);
         $exhibitionName = $exhibitionRecord->getTranslations('name');
@@ -174,8 +175,20 @@ class ExhibitionController extends Controller
             'museum_name' => $museum,
             ];
 
+        $museums = Museum::all();
+        $museumsData = [];
+        foreach ($museums as $museum) {
+            $museumData = [];
+            $museumData['id'] = $museum->id;
+            $museumData['name'] = [
+                $primaryLanguage->code => $museum->getTranslation('name', $primaryLanguage->code),
+            ];
+            $museumsData[] = $museumData;
+        }
+
         return Inertia::render('backend/Exhibitions/Edit', [
             'exhibition' => $exhibitionData,
+            'museums' => $museumsData,
         ]);
 
     }
@@ -189,10 +202,10 @@ class ExhibitionController extends Controller
             $exhibition->update([
                 'name' => $data['name'] ?? $exhibition->name,
                 'description' => $data['description'] ?? $exhibition->description,
-                'start_date' => $data['start_date'] ?? $exhibition->start_date,
-                'end_date' => $data['end_date'] ?? $exhibition->end_date,
-                'is_archived' => false,
-                'museum_id' => $data['museum_id'] ?? $exhibition->museum_id
+                'start_date' => (!empty($data['start_date']) && $data['start_date'] !== '') ? $data['start_date'] : null,
+                'end_date' => (!empty($data['end_date']) && $data['end_date'] !== '') ? $data['end_date'] : null,
+                'is_archived' => $data['is_archived'] ?? false,
+                'museum_id' => $data['museum_id'] ?? $exhibition->museum_id,
             ]);
 
             // Gestione Audio
@@ -308,6 +321,7 @@ class ExhibitionController extends Controller
      */
     private function handleGalleryUpdate(Exhibition $exhibition, array $imagesData): void
     {
+        //DA FARE: Controllare perche vengono come string gli id delle immagini gia esistenti.
         $currentImageIds = $exhibition->images()->pluck('media.id')->toArray();
         $updatedImageIds = [];
 
@@ -350,6 +364,7 @@ class ExhibitionController extends Controller
             $this->mediaService->deleteMedia($imageId);
         }
     }
+
 }
 
 

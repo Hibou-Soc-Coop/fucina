@@ -4,6 +4,7 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\MuseumController;
 use App\Http\Controllers\ExhibitionController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -22,6 +23,7 @@ Route::prefix('backend')->group(function () {
     Route::resource('media', MediaController::class)->middleware(['auth', 'verified'])->names('media');
     Route::resource('museums', MuseumController::class)->middleware(['auth', 'verified']);
     Route::resource('exhibitions', ExhibitionController::class)->middleware(['auth', 'verified']);
+    Route::resource('posts', PostController::class)->middleware(['auth', 'verified']);
 });
 
 Route::prefix('museum')->group(function(){

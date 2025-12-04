@@ -5,48 +5,46 @@ import Label from '@/components/ui/label/Label.vue';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/AppLayout.vue';
 import PageLayout from '@/layouts/PageLayout.vue';
-import exhibitionRoutes from '@/routes/exhibitions';
+import postRoutes from '@/routes/posts';
 import MultipleMediaUploader from '@/components/hibou/MultipleMediaUploader.vue';
 import { type BreadcrumbItem } from '@/types';
-import { ExhibitionData, MuseumData, type Language, MediaData } from '@/types/flexhibition';
+import { PostData, ExhibitionData, type Language, MediaData } from '@/types/flexhibition';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import TipTap from '@/components/hibou/TipTap.vue';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 
-const props = defineProps<{ exhibition: ExhibitionData, museums: MuseumData[] }>();
+const props = defineProps<{ post: PostData, exhibitions: ExhibitionData[] }>();
 
 const page = usePage();
 const languages = page.props.languages as Language[];
-console.log("museums:", props.museums);
+console.log("exhibitions:", props.exhibitions);
 const primaryLanguage = page.props.primaryLanguage as Language;
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Mostra', href: exhibitionRoutes.index().url },
+    { title: 'Post', href: postRoutes.index().url },
     { title: 'Modifica', href: '#' },
 ];
 
-const deleteExhibition = () => {
-    if (confirm('Sei sicuro di voler eliminare questo mostra?')) {
-        router.delete(exhibitionRoutes.destroy.url(props.exhibition.id));
+const deletePost = () => {
+    if (confirm('Sei sicuro di voler eliminare questo post?')) {
+        router.delete(postRoutes.destroy.url(props.post.id));
     }
 };
 
 const emptyByLanguage = Object.fromEntries(languages.map((l) => [l.code, '']));
 
 const form = useForm({
-    name: props.exhibition.name || { ...emptyByLanguage },
-    description: props.exhibition.description ?? { ...emptyByLanguage },
-    start_date: props.exhibition.start_date ?? '' as string,
-    end_date: props.exhibition.end_date ?? '' as string,
+    name: props.post.name || { ...emptyByLanguage },
+    description: props.post.description ?? { ...emptyByLanguage },
+    content: props.post.content ?? { ...emptyByLanguage },
     audio: null as MediaData | null,
-    images: Object.values(props.exhibition.images || {}).map(image => ({
+    images: Object.values(props.post.images || {}).map(image => ({
         id: image.id,
         url: image.url,
         title: image.title,
         description: image.description,
     })) as MediaData[],
-    is_archived: props.exhibition.is_archived ?? false,
-    museum_id: props.exhibition.museum_id,
-    museum_name: props.exhibition.museum_name,
+    exhibition_id: props.post.exhibition_id,
+    exhibition_name: props.post.exhibition_name,
     processing: false,
 });
 
@@ -54,7 +52,7 @@ function submit() {
     form.transform((data) => ({
         ...data,
         _method: 'PUT'
-    })).post(exhibitionRoutes.update.url(props.exhibition.id), {
+    })).post(postRoutes.update.url(props.post.id), {
         onFinish: () => {
             form.processing = false;
         },
@@ -64,36 +62,30 @@ function submit() {
 
 <template>
 
-    <Head :title="props.exhibition.name[primaryLanguage.code] + ' - Modifica'" />
+    <Head :title="props.post.name[primaryLanguage.code] + ' - Modifica'" />
     <AppLayout :breadcrumbs="breadcrumbs">
-        <PageLayout title="Dettaglio Mostra">
+        <PageLayout title="Dettaglio Post">
             <form @submit.prevent="submit">
                 <div class="mt-4">
                     <Button :disabled="form.processing" color-scheme="create" class="mr-2">
                         Salva Modifiche
                     </Button>
-                    <Button @click="deleteExhibition" color-scheme="delete">
-                        Elimina Mostra
+                    <Button @click="deletePost" color-scheme="delete">
+                        Elimina Opera
                     </Button>
                 </div>
                 <div class="grid grid-cols-[1fr_4fr] grid-rows-[auto_auto] gap-4">
                     <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">
-                        <Label class="block text-lg font-semibold"> Audio Mostra </Label>
-                        <audio v-if="props.exhibition.audio.url[primaryLanguage.code]"
-                            :src="`/storage/${props.exhibition.audio.url[primaryLanguage.code]}`" controls
+                        <Label class="block text-lg font-semibold"> Audio Opera </Label>
+                        <audio v-if="props.post.audio.url[primaryLanguage.code]"
+                            :src="`/storage/${props.post.audio.url[primaryLanguage.code]}`" controls
                             class="mt-2 w-full" />
                         <div v-else class="mt-2 w-full rounded-md border border-gray-300 bg-gray-100">
                             <p class="p-4 text-sm text-gray-500">Nessun audio disponibile</p>
                         </div>
                     </div>
-                    <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">
-                        <Label class="block text-lg font-semibold"> Data d'inizio </Label>
-                        <Input class="mb-4" v-model="form.start_date" type="date" />
-                        <Label class="block text-lg font-semibold"> Data di fine </Label>
-                        <Input class="mb-4" v-model="form.end_date" type="date" />
-                    </div>
                     <div class="col-start-2 col-end-3 row-start-1 row-end-3 rounded-lg border p-4 shadow">
-                        <h2 class="mb-4 text-lg font-semibold">Informazioni Mostra</h2>
+                        <h2 class="mb-4 text-lg font-semibold">Informazioni Opera</h2>
                         <Tabs default-value="it" :unmount-on-hide="false" class="grid w-full grid-cols-[15%_auto] gap-8"
                             orientation="vertical">
                             <TabsList class="grid h-fit w-full grid-cols-1 gap-2">
@@ -104,40 +96,40 @@ function submit() {
                                 </template>
                             </TabsList>
                             <TabsContent v-for="language in languages" :key="language.code" :value="language.code">
-                                <Label class="mb-4 text-base font-semibold"> Nome Mostra - {{ language.name }} </Label>
+                                <Label class="mb-4 text-base font-semibold"> Nome Opera - {{ language.name }} </Label>
                                 <Input class="mb-4" v-model="form.name[language.code]" />
-                                <div v-if="form.errors[`name.${language.code}`]"
+                                <Label class="mb-4 text-base font-semibold"> Descrizione Opera - {{ language.name }} </Label>
+                                <Input class="mb-4" v-model="form.description[language.code]" />
+                                <div v-if="form.errors[`description.${language.code}`]"
                                     class="mb-4 rounded bg-red-100 p-2 text-sm text-red-700">
-                                    {{ form.errors[`name.${language.code}`] }}
+                                    {{ form.errors[`description.${language.code}`] }}
                                 </div>
-                                <Label class="mb-4 text-base font-semibold"> Descrizione Mostra - {{ language.name }}
+                                <Label class="mb-4 text-base font-semibold"> Contenuto Opera - {{ language.name }}
                                 </Label>
                                 <div class="mb-4">
-                                    <TipTap v-model="form.description[language.code]" />
+                                    <TipTap v-model="form.content[language.code]" />
                                 </div>
-                                <div class="mb-4 hidden">
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" v-model="form.is_archived" class="form-checkbox" />
-                                        <span class="ml-2">Archiviata</span>
-                                    </label>
-                                </div>
-                                <Label class="mb-1 font-semibold">Museum</Label>
-                                <Select class="mb-4" v-model="form.museum_id">
+                                <Label class="mb-1 font-semibold">Mostra</Label>
+                                <Select class="mb-4" v-model="form.exhibition_id">
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Seleziona museo" />
+                                        <SelectValue placeholder="Seleziona Opera" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem v-for="museum in props.museums" :key="museum.id" :value="museum.id">
+                                        <SelectItem v-for="exhibition in props.exhibitions" :key="exhibition.id" :value="exhibition.id">
                                             {{
-                                            museum.name[language.code] }}
+                                            exhibition.name }}
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
+                                <div v-if="form.errors[`exhibition_id`]"
+                                    class="mb-4 rounded bg-red-100 p-2 text-sm text-red-700">
+                                    {{ form.errors[`exhibition_id`] }}
+                                </div>
                             </TabsContent>
                         </Tabs>
                     </div>
                     <div class="col-span-2 rounded-lg border p-4 shadow">
-                        <Label class="mb-4 text-lg font-semibold"> Immagini del Mostra</Label>
+                        <Label class="mb-4 text-lg font-semibold"> Immagini del Opera</Label>
                         <div class="col-span-2 rounded-lg border p-4 shadow">
                             <Label class="mb-4 text-lg font-semibold"> Immagini della Collezione </Label>
                             <MultipleMediaUploader v-model="form.images" :is-readonly="false" :show-caption="false"

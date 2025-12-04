@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Translatable\HasTranslations;
 
+/**
+ * @property int $id
+ * @property array $name
+ * @property array|null $description
+ * @property int|null $audio_id
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ *
+ * @property-read Media|null $audio
+ */
 class Exhibition extends Model
 {
     use HasTranslations;

@@ -5,47 +5,47 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/AppLayout.vue';
 import PageLayout from '@/layouts/PageLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { ExhibitionData, type Language } from '@/types/flexhibition';
+import { PostData, type Language } from '@/types/flexhibition';
 import { Head, router, usePage } from '@inertiajs/vue3';
-import exhibitionsRoutes from '@/routes/exhibitions';
+import postsRoutes from '@/routes/posts';
 
 const page = usePage();
 const languages = page.props.languages as Language[];
 const primaryLanguage = page.props.primaryLanguage as Language;
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Mostra', href: exhibitionsRoutes.index().url },
+    { title: 'Opera', href: postsRoutes.index().url },
     { title: 'Dettaglio', href: '#' },
 ];
 
-const props = defineProps<{ exhibition: ExhibitionData }>();
+const props = defineProps<{ post: PostData }>();
 
-console.log("Exhibition imasges Props:", props.exhibition.images);
+console.log("Exhibition Name:", props.post.exhibition_name);
 
-const deleteExhibition = () => {
-    if (confirm('Sei sicuro di voler eliminare questa mostra?')) {
-        router.delete(exhibitionsRoutes.destroy.url(props.exhibition.id));
+const deletePost = () => {
+    if (confirm('Sei sicuro di voler eliminare questa opera?')) {
+        router.delete(postsRoutes.destroy.url(props.post.id));
     }
 };
 </script>
 
 <template>
-    <Head :title="props.exhibition.name[primaryLanguage.code] + ' - Dettaglio'" />
+    <Head :title="props.post.name[primaryLanguage.code] + ' - Dettaglio'" />
     <AppLayout :breadcrumbs="breadcrumbs">
-        <PageLayout title="Dettaglio Mostra">
+        <PageLayout title="Dettaglio Opera">
             <template #button>
-                <Button @click="router.visit(exhibitionsRoutes.edit.url(props.exhibition.id))" color-scheme="edit" class="mr-2">
-                    Modifica Mostra
+                <Button @click="router.visit(postsRoutes.edit.url(props.post.id))" color-scheme="edit" class="mr-2">
+                    Modifica Opera
                 </Button>
-                <Button @click="deleteExhibition" color-scheme="delete">
-                    Elimina Mostra
+                <Button @click="deletePost" color-scheme="delete">
+                    Elimina Opera
                 </Button>
             </template>
             <div class="grid grid-cols-[1fr_4fr] grid-rows-[auto_auto] gap-4">
                 <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">
-                    <Label class="block text-lg font-semibold"> Audio Mostra </Label>
+                    <Label class="block text-lg font-semibold"> Audio Opera </Label>
                     <audio
-                        v-if="props.exhibition.audio.url[primaryLanguage.code]"
-                        :src="`/storage/${props.exhibition.audio.url[primaryLanguage.code]}`"
+                        v-if="props.post.audio.url[primaryLanguage.code]"
+                        :src="`/storage/${props.post.audio.url[primaryLanguage.code]}`"
                         controls
                         class="mt-2 w-full"
                     />
@@ -59,7 +59,7 @@ const deleteExhibition = () => {
                         <TabsList class="grid h-fit w-full grid-cols-1 gap-2">
                             <template v-for="language in languages" :key="language.code">
                                 <TabsTrigger
-                                    v-if="props.exhibition.name[language.code]"
+                                    v-if="props.post.name[language.code]"
                                     :value="language.code"
                                 >
                                     {{ language.name }}
@@ -67,26 +67,26 @@ const deleteExhibition = () => {
                             </template>
                         </TabsList>
                         <TabsContent v-for="language in languages" :key="language.code" :value="language.code">
-                            <Label class="mb-4 text-base font-semibold"> Nome Mostra - {{ language.name }} </Label>
+                            <Label class="mb-4 text-base font-semibold"> Nome Opera - {{ language.name }} </Label>
                             <p class="mb-6 flex min-h-9 w-full items-center rounded-md border border-input px-3 py-1 text-sm shadow-xs shadow-input">
-                                {{ props.exhibition.name[language.code] }}
+                                {{ props.post.name[language.code] }}
                             </p>
-                            <Label class="mb-4 text-base font-semibold"> Descrizione Mostra - {{ language.name }} </Label>
+                            <Label class="mb-4 text-base font-semibold"> Descrizione Opera - {{ language.name }} </Label>
                             <div class="mb-6 flex min-h-9 w-full items-center rounded-md border border-input px-3 py-1 text-sm shadow-xs shadow-input"
-                                v-html="props.exhibition.description?.[language.code] || '-'">
+                                v-html="props.post.description?.[language.code] || '-'">
                             </div>
-                            <Label class="mb-4 text-base font-semibold"> Museo - {{ language.name }} </Label>
+                            <Label class="mb-4 text-base font-semibold"> Mostra - {{ language.name }} </Label>
                             <div class="mb-6 flex min-h-9 w-full items-center rounded-md border border-input px-3 py-1 text-sm shadow-xs shadow-input"
-                                v-html="props.exhibition.museum_name?.[language.code] || '-'">
+                                v-html="props.post.exhibition_name || '-'">
                             </div>
                         </TabsContent>
                     </Tabs>
                 </div>
                 <div class="col-span-2 rounded-lg border p-4 shadow">
-                    <Label class="mb-4 text-lg font-semibold"> Immagini del Mostra</Label>
+                    <Label class="mb-4 text-lg font-semibold"> Immagini della Opera</Label>
                     <div class="grid grid-cols-5 gap-4">
                         <div
-                            v-for="(image, index) in Object.values(props.exhibition.images)"
+                            v-for="(image, index) in Object.values(props.post.images)"
                             :key="index"
                             class="aspect-square w-full overflow-hidden rounded-md border border-gray-300"
                         >

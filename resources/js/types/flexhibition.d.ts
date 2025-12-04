@@ -111,6 +111,7 @@ export interface ExhibitionData {
     readonly name: Record<string, string>;
     readonly description?: Record<string, string>;
     readonly images: Record <string,{
+        id: number;
         url: Record<string, string>;
         title: Record<string, string>;
         description?: Record<string, string>;
@@ -127,71 +128,39 @@ export interface ExhibitionData {
     readonly museum_name?: Record<string, string>;
 }
 
-/** Punto (dati base, riferimenti a media) */
-export interface MuseumPoint {
-    readonly museum_point_id: number;
-    readonly museum_name: string;
-    readonly museum_point_name: string;
-    readonly museum_point_qr_url?: string;
-    readonly museum_point_type: 'post' | 'exhibition';
-}
-
-/** Informazioni multilingua su un Punto */
-export interface MuseumPointInfo {
-    readonly museum_point_id: string;
-    readonly museum_point_name: string;
-    readonly museum_id?: string;
-    readonly museum_name?: string;
-    readonly museum_point_type: 'post' | 'exhibition';
-    readonly linked_post_id: string;
-    readonly linked_post_name: string;
-    readonly linked_exhibition_id: string;
-    readonly linked_exhibition_name: string;
-    readonly museum_point_qr_url?: string;
-    readonly museum_qr_code_image?: Record<
-        string,
-        {
-            qr_code_title: string;
-            qr_code_image_url: string;
-        }
-    >;
-}
 
 /** Opera*/
-export interface Post {
-    readonly exhibition_id?: string;
-    readonly museum_point_id?: string;
-    readonly post_id: number;
-    readonly post_title_id: number;
-    readonly post_content_id?: number;
-    readonly post_image_id?: number;
-    readonly post_audio_id?: number;
+export interface PostRecord {
+    readonly id: number;
+    readonly name: number;
+    readonly description?: number;
+    readonly image_id?: number;
+    readonly audio_id?: number;
+    readonly exhibition_id?: number;
 }
 
 /** Informazioni multilingua su un' Opera */
-export interface PostInfo {
-    readonly exhibition_id: string;
-    readonly exhibition_name: string;
-    readonly post_id: string;
-    readonly post_title: string;
-    readonly post_content?: string;
-    readonly post_gallery: Record<
-        string,
-        {
-            media_url: string;
-            media_title: string;
-            media_description?: string;
-        }
+export interface PostData {
+    readonly id: string;
+    readonly name: Record<string, string>;
+    readonly description?: Record<string, string>;
+    readonly content?: Record<string, string>;
+    readonly images: Record<
+    string,
+    {
+        id: number;
+        url: Record<string, string>;
+        title: Record<string, string>;
+        description?: Record<string, string>;
+    }
     >;
-    readonly post_audio: Record<
-        string,
-        {
-            media_url: string;
-            media_title: string;
-            media_description?: string;
-        }
-    >;
-    readonly museum_point_id?: string;
+    readonly audio: {
+        url: Record<string, string>;
+        title: Record<string, string>;
+        description?: Record<string, string>;
+    };
+    readonly exhibition_id: number;
+    readonly exhibition_name?: Record<string, string>;
 }
 
 /** Opera della mostra */

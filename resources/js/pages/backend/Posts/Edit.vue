@@ -12,12 +12,12 @@ import { PostData, ExhibitionData, type Language, MediaData } from '@/types/flex
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import TipTap from '@/components/hibou/TipTap.vue';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import SingleMediaUpload from '@/components/hibou/SingleMediaUpload.vue';
 
 const props = defineProps<{ post: PostData, exhibitions: ExhibitionData[] }>();
 
 const page = usePage();
 const languages = page.props.languages as Language[];
-console.log("exhibitions:", props.exhibitions);
 const primaryLanguage = page.props.primaryLanguage as Language;
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Post', href: postRoutes.index().url },
@@ -66,7 +66,7 @@ function submit() {
     <AppLayout :breadcrumbs="breadcrumbs">
         <PageLayout title="Dettaglio Post">
             <form @submit.prevent="submit">
-                <div class="mt-4">
+                <div class="mb-4 text-right">
                     <Button :disabled="form.processing" color-scheme="create" class="mr-2">
                         Salva Modifiche
                     </Button>
@@ -77,9 +77,9 @@ function submit() {
                 <div class="grid grid-cols-[1fr_4fr] grid-rows-[auto_auto] gap-4">
                     <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">
                         <Label class="block text-lg font-semibold"> Audio Opera </Label>
-                        <audio v-if="props.post.audio.url[primaryLanguage.code]"
-                            :src="`/storage/${props.post.audio.url[primaryLanguage.code]}`" controls
-                            class="mt-2 w-full" />
+                        <SingleMediaUpload v-model="form.audio" v-if="props.post.audio.url[primaryLanguage.code]"
+                            :media_preview="`/storage/${props.post.audio.url[primaryLanguage.code]}`" :is-readonly="false"
+                            :accept="'audio/*'" :max-file-size="10 * 1024 * 1024" />
                         <div v-else class="mt-2 w-full rounded-md border border-gray-300 bg-gray-100">
                             <p class="p-4 text-sm text-gray-500">Nessun audio disponibile</p>
                         </div>
@@ -117,7 +117,7 @@ function submit() {
                                     <SelectContent>
                                         <SelectItem v-for="exhibition in props.exhibitions" :key="exhibition.id" :value="exhibition.id">
                                             {{
-                                            exhibition.name }}
+                                            exhibition.name[language.code] }}
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
@@ -136,6 +136,14 @@ function submit() {
                                 :language="primaryLanguage.code" :primary="true" />
                         </div>
                     </div>
+                </div>
+                <div class="mt-4 text-right">
+                    <Button :disabled="form.processing" color-scheme="create" class="mr-2">
+                        Salva Modifiche
+                    </Button>
+                    <Button @click="deletePost" color-scheme="delete">
+                        Elimina Opera
+                    </Button>
                 </div>
             </form>
         </PageLayout>

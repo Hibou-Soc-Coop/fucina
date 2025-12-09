@@ -64,7 +64,7 @@ function submit() {
                     <div class="rounded-lg border p-4 shadow">
                         <Label class="mb-4 text-lg font-semibold"> Logo Museo </Label>
                         <div class="overflow-hidden rounded-md">
-                            <SingleMediaUpload v-model="form.logo" :is-readonly="false" :accept="'image/*'" :max-file-size="5 * 1024 * 1024" />
+                            <SingleMediaUpload multi-language :current-lang="currentLang" v-model="form.logo" :is-readonly="false" :accept="'image/*'" :max-file-size="5 * 1024 * 1024" />
                         </div>
                     </div>
                     <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">

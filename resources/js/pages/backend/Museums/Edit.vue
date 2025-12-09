@@ -11,6 +11,7 @@ import { type BreadcrumbItem } from '@/types';
 import { MuseumData, type Language, MediaData } from '@/types/flexhibition';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import TipTap from '@/components/hibou/TipTap.vue';
+import MultipleMediaUploader from '@/components/hibou/MultipleMediaUploader.vue';
 
 const props = defineProps<{ museum: MuseumData }>();
 
@@ -32,18 +33,24 @@ const deleteMuseum = () => {
 const emptyByLanguage = Object.fromEntries(languages.map((l) => [l.code, '']));
 
 const form = useForm({
-    name: props.museum.name,
-    description: props.museum.description,
-    logo: props.museum.logo as MediaData,
+    name: props.museum.name ?? { ...emptyByLanguage },
+    description: props.museum.description ?? { ...emptyByLanguage },
+    logo: props.museum.logo as MediaData ?? null,
     audio: null as MediaData | null,
-    images: [] as MediaData[],
+    images: Object.values(props.museum.images || {}).map(image => ({
+        id: image.id,
+        url: image.url,
+        title: image.title,
+        description: image.description,
+    })) as MediaData[],
     processing: false,
 });
 
 function submit() {
-    form.processing = true;
-    form.put(museumRoutes.update.url(props.museum.id), {
-        forceFormData: true,
+    form.transform((data) => ({
+        ...data,
+        _method: 'PUT'
+    })).post(museumRoutes.update.url(props.museum.id), {
         onFinish: () => {
             form.processing = false;
         },
@@ -57,8 +64,8 @@ function submit() {
     <AppLayout :breadcrumbs="breadcrumbs">
         <PageLayout title="Dettaglio Museo">
             <form @submit.prevent="submit">
-                <div class="mt-4">
-                    <Button  :disabled="form.processing" color-scheme="create" class="mr-2">
+                <div class="mb-4 text-right">
+                    <Button :disabled="form.processing" color-scheme="create" class="mr-2">
                         Salva Modifiche
                     </Button>
                     <Button @click="deleteMuseum" color-scheme="delete">
@@ -70,16 +77,19 @@ function submit() {
                         <Label class="mb-4 text-lg font-semibold"> Logo Museo </Label>
                         <!-- {{ form.logo.url[primaryLanguage.code] }} -->
                         <div class="overflow-hidden rounded-md border border-gray-300">
-                            <SingleMediaUpload v-if="props.museum.logo.url[primaryLanguage.code]" v-model="form.logo"
+                            <SingleMediaUpload v-if="props.museum.logo.url[primaryLanguage.code]"
+                                :media_preview="`/storage${props.museum.logo.url[primaryLanguage.code]}`" v-model="form.logo"
                                 :is-readonly="false" :accept="'image/*'" :max-file-size="5 * 1024 * 1024" />
-                            <img v-else src="/images/placeholder-image.png" alt="Placeholder"
-                                class="h-full w-full object-cover" />
+                           <div v-else class="mt-2 w-full rounded-md border border-gray-300 bg-gray-100">
+                            <p class="p-4 text-sm text-gray-500">Nessun logo disponibile</p>
+                        </div>
                         </div>
                     </div>
                     <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">
                         <Label class="block text-lg font-semibold"> Audio Museo </Label>
-                        <audio v-if="props.museum.audio.url[primaryLanguage.code]"
-                            :src="props.museum.audio.url[primaryLanguage.code]" controls class="mt-2 w-full" />
+                        <SingleMediaUpload v-model="form.audio" v-if="props.museum.audio.url[primaryLanguage.code]"
+                            :media_preview="`/storage/${props.museum.audio.url[primaryLanguage.code]}`" :is-readonly="false"
+                            :accept="'audio/*'" :max-file-size="10 * 1024 * 1024" />
                         <div v-else class="mt-2 w-full rounded-md border border-gray-300 bg-gray-100">
                             <p class="p-4 text-sm text-gray-500">Nessun audio disponibile</p>
                         </div>
@@ -90,8 +100,7 @@ function submit() {
                             orientation="vertical">
                             <TabsList class="grid h-fit w-full grid-cols-1 gap-2">
                                 <template v-for="language in languages" :key="language.code">
-                                    <TabsTrigger
-                                        :value="language.code">
+                                    <TabsTrigger :value="language.code">
                                         {{ language.name }}
                                     </TabsTrigger>
                                 </template>
@@ -113,14 +122,20 @@ function submit() {
                     </div>
                     <div class="col-span-2 rounded-lg border p-4 shadow">
                         <Label class="mb-4 text-lg font-semibold"> Immagini del Museo</Label>
-                        <div class="grid grid-cols-5 gap-4">
-                            <div v-for="(image, index) in Object.values(props.museum.images)" :key="index"
-                                class="aspect-square w-full overflow-hidden rounded-md border border-gray-300">
-                                <img :src="image.url[primaryLanguage.code]" :alt="image.title[primaryLanguage.code]"
-                                    class="h-full w-full object-cover" />
-                            </div>
+                        <div class="col-span-2 rounded-lg border p-4 shadow">
+                            <Label class="mb-4 text-lg font-semibold"> Immagini della Collezione </Label>
+                            <MultipleMediaUploader v-model="form.images" :is-readonly="false" :show-caption="false"
+                                :language="primaryLanguage.code" :primary="true" />
                         </div>
                     </div>
+                </div>
+                <div class="mt-4 text-right">
+                    <Button :disabled="form.processing" color-scheme="create" class="mr-2">
+                        Salva Modifiche
+                    </Button>
+                    <Button @click="deleteMuseum" color-scheme="delete">
+                        Elimina Museo
+                    </Button>
                 </div>
             </form>
         </PageLayout>

@@ -29,7 +29,7 @@ class PostController extends Controller
         $primaryLanguage = LanguageHelper::getPrimaryLanguage();
         $primaryLanguageCode = $primaryLanguage->code;
 
-        $postRecords = Post::with(['exhibitions'])->get();
+        $postRecords = Post::with(['exhibition'])->get();
 
         $posts = [];
 
@@ -50,7 +50,7 @@ class PostController extends Controller
                     'description' => $image->getTranslations('description'),
                 ];
             })->toArray();
-            $post['exhibition'] = $postRecord->exhibition_id;
+            $post['exhibition_id'] = $postRecord->exhibition_id;
 
             $posts[] = $post;
         }
@@ -159,7 +159,7 @@ class PostController extends Controller
         $primaryLanguage = LanguageHelper::getPrimaryLanguage();
         $primaryLanguageCode = $primaryLanguage->code;
 
-        $postRecord = Post::with(['exhibitions'])->findOrFail($id);
+        $postRecord = Post::with(['exhibition'])->findOrFail($id);
 
         $postData = [
             'id' => $postRecord->id,
@@ -168,7 +168,7 @@ class PostController extends Controller
             'content' => $postRecord->getTranslations('content'),
             'audio' => $postRecord->audio,
             'images' => $postRecord->images,
-            'exhibitions' => $postRecord->exhibitions->pluck('id')->toArray(),
+            'exhibition_id' => $postRecord->exhibition_id,
         ];
 
         $exhibitions = Exhibition::all();

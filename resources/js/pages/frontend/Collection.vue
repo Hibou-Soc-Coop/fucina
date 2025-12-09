@@ -4,6 +4,7 @@ import HMenu from '@/components/HMenu.vue';
 import { router } from '@inertiajs/vue3';
 
 
+
 </script>
 <template>
     <div class="h-screen grid grid-rows-[15%_85%]">

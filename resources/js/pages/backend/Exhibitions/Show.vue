@@ -53,6 +53,13 @@ const deleteExhibition = () => {
                         <p class="p-4 text-sm text-gray-500">Nessun audio disponibile</p>
                     </div>
                 </div>
+                <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">
+                    <Label class="block text-lg font-semibold"> Date Mostra </Label>
+                    <p class="mt-2 w-full rounded-md border border-gray-300 bg-gray-100 py-6 px-4 text-md text-gray-500">
+                        Data Inizio: {{ props.exhibition.start_date || '-' }} <br />
+                        Data Fine: {{ props.exhibition.end_date || '-' }}
+                    </p>
+                </div>
                 <div class="col-start-2 col-end-3 row-start-1 row-end-3 rounded-lg border p-4 shadow">
                     <h2 class="mb-4 text-lg font-semibold">Informazioni Mostra</h2>
                     <Tabs default-value="it" :unmount-on-hide="false" class="grid w-full grid-cols-[15%_auto] gap-8" orientation="vertical">
@@ -83,7 +90,7 @@ const deleteExhibition = () => {
                     </Tabs>
                 </div>
                 <div class="col-span-2 rounded-lg border p-4 shadow">
-                    <Label class="mb-4 text-lg font-semibold"> Immagini del Mostra</Label>
+                    <Label class="mb-4 text-lg font-semibold">Immagini del Mostra</Label>
                     <div class="grid grid-cols-5 gap-4">
                         <div
                             v-for="(image, index) in Object.values(props.exhibition.images)"

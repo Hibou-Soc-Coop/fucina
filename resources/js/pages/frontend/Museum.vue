@@ -3,6 +3,18 @@ import { ref } from 'vue';
 import LogoLight from '@storage/assets/logo.svg';
 import Dropdown from '@storage/assets/drop-down.svg';
 import { router } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
+
+const page = usePage();
+const languages = page.props.languages as Array<{ code: string; name: string }>;
+console.log("Languages in :", languages);
+
+const props = defineProps<{ museumId: number; language: string }>();
+
+
+
+const currentLanguage = ref(props.language);
+console.log("Current Language in Museum.vue:", currentLanguage);
 
 const loading = ref(true);
 
@@ -32,7 +44,7 @@ setTimeout(() => {
                 l’opera scultorea di Nivola e particolarmente la fase finale del suo percorso, caratterizzata da un
                 ritorno alla statuaria – con la serie delle Madri e delle Vedove – e ai materiali nobili della scultura
                 tradizionale</p>
-            <button  class="bg-black block text-white font-bold mx-auto py-4 px-8 mt-8" @click="router.visit('/museum/collection')">ENTRA</button>
+            <button  class="bg-black block text-white font-bold mx-auto py-4 px-8 mt-8" @click="router.visit(`/museum/${props.museumId}/collection/${collectionId}/${currentLanguage}`)">ENTRA</button>
         </div>
         <transition leave-active-class="transition-opacity duration-3000" leave-from-class="opacity-100"
             leave-to-class="opacity-0">

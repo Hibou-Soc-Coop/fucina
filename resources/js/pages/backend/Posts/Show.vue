@@ -43,7 +43,7 @@ const deletePost = () => {
             <div class="grid grid-cols-[1fr_4fr] grid-rows-[auto_auto] gap-4">
                 <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">
                     <Label class="block text-lg font-semibold"> Audio Opera </Label>
-                    <audio
+                    <!-- <audio
                         v-if="props.post.audio.url[primaryLanguage.code]"
                         :src="`/storage/${props.post.audio.url[primaryLanguage.code]}`"
                         controls
@@ -51,7 +51,7 @@ const deletePost = () => {
                     />
                     <div v-else class="mt-2 w-full rounded-md border border-gray-300 bg-gray-100">
                         <p class="p-4 text-sm text-gray-500">Nessun audio disponibile</p>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="col-start-2 col-end-3 row-start-1 row-end-3 rounded-lg border p-4 shadow">
                     <h2 class="mb-4 text-lg font-semibold">Informazioni Mostra</h2>

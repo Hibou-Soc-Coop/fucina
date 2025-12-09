@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::redirect('/', '/backend');
+Route::redirect('/museum', '/museum/1/it');
 
 Route::prefix('backend')->group(function () {
     Route::get('/', function () {
@@ -26,17 +27,15 @@ Route::prefix('backend')->group(function () {
     Route::resource('posts', PostController::class)->middleware(['auth', 'verified']);
 });
 
-Route::prefix('museum')->group(function(){
-    Route::get('/', function () {
-        return Inertia::render('frontend/Museum');
-    })->name('museum.index');
-    Route::get('/collection', function(){
-        return Inertia::render('frontend/Collection');
-    })->name('collection.index');
-    Route::get('/collection/{id}', function($id){
-        return Inertia::render('frontend/Post', ['postId' => $id]);
-    })->name('post');
-});
+Route::get('museum/{museumId}/{language?}', function ($museumId = null, $language = 'it') {
+    return Inertia::render('frontend/Museum', [ 'museumId' => $museumId, 'language' => $language ]);
+})->name('museum')->where('language', '[a-z]{2}')->where('museumId', '[0-9]+');
+Route::get('museum/{museumId}/collection/{collectionId}/{language?}', function ($museumId = null, $collectionId = null, $language = 'it') {
+    return Inertia::render('frontend/Collection', ['museumId' => $museumId, 'collectionId' => $collectionId, 'language' => $language]);
+})->name('collection.index')->where('language', '[a-z]{2}');
+Route::get('museum/{museumId}/collection/{collectionId}/post/{postId}/{language?}', function ($museumId = null, $collectionId = null, $postId = null, $language = 'it',) {
+    return Inertia::render('frontend/Post', ['museumId' => $museumId, 'collectionId' => $collectionId, 'postId' => $postId, 'language' => $language]);
+})->name('post');
 
 
 require __DIR__ . '/settings.php';

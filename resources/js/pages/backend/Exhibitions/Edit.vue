@@ -12,6 +12,7 @@ import { ExhibitionData, MuseumData, type Language, MediaData } from '@/types/fl
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import TipTap from '@/components/hibou/TipTap.vue';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import SingleMediaUpload from '@/components/hibou/SingleMediaUpload.vue';
 
 const props = defineProps<{ exhibition: ExhibitionData, museums: MuseumData[] }>();
 
@@ -68,7 +69,7 @@ function submit() {
     <AppLayout :breadcrumbs="breadcrumbs">
         <PageLayout title="Dettaglio Mostra">
             <form @submit.prevent="submit">
-                <div class="mt-4">
+                <div class="mb-4 text-right">
                     <Button :disabled="form.processing" color-scheme="create" class="mr-2">
                         Salva Modifiche
                     </Button>
@@ -79,9 +80,9 @@ function submit() {
                 <div class="grid grid-cols-[1fr_4fr] grid-rows-[auto_auto] gap-4">
                     <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">
                         <Label class="block text-lg font-semibold"> Audio Mostra </Label>
-                        <audio v-if="props.exhibition.audio.url[primaryLanguage.code]"
-                            :src="`/storage/${props.exhibition.audio.url[primaryLanguage.code]}`" controls
-                            class="mt-2 w-full" />
+                        <SingleMediaUpload v-model="form.audio" v-if="props.exhibition.audio.url[primaryLanguage.code]"
+                            :media_preview="`/storage/${props.exhibition.audio.url[primaryLanguage.code]}`" :is-readonly="false"
+                            :accept="'audio/*'" :max-file-size="10 * 1024 * 1024" />
                         <div v-else class="mt-2 w-full rounded-md border border-gray-300 bg-gray-100">
                             <p class="p-4 text-sm text-gray-500">Nessun audio disponibile</p>
                         </div>
@@ -144,6 +145,14 @@ function submit() {
                                 :language="primaryLanguage.code" :primary="true" />
                         </div>
                     </div>
+                </div>
+                <div class="mt-4 text-right">
+                    <Button :disabled="form.processing" color-scheme="create" class="mr-2">
+                        Salva Modifiche
+                    </Button>
+                    <Button @click="deleteExhibition" color-scheme="delete">
+                        Elimina Mostra
+                    </Button>
                 </div>
             </form>
         </PageLayout>

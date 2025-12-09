@@ -42,7 +42,7 @@ const deleteMuseum = () => {
             <div class="grid grid-cols-[1fr_4fr] grid-rows-[auto_auto] gap-4">
                 <div class="rounded-lg border p-4 shadow">
                     <Label class="mb-4 text-lg font-semibold"> Logo Museo </Label>
-                    <div class="overflow-hidden rounded-md border border-gray-300">
+                    <div class="overflow-hidden rounded-md border border-gray-300 max-h-80">
                         <img
                             v-if="props.museum.logo.url[primaryLanguage.code]"
                             :src="`/storage/${props.museum.logo.url[primaryLanguage.code]}`"
@@ -83,9 +83,9 @@ const deleteMuseum = () => {
                                 {{ props.museum.name[language.code] }}
                             </p>
                             <Label class="mb-4 text-base font-semibold"> Descrizione Museo - {{ language.name }} </Label>
-                            <p class="mb-6 flex min-h-9 w-full items-center rounded-md border border-input px-3 py-1 text-sm shadow-xs shadow-input">
-                                {{ props.museum.description[language.code] }}
-                            </p>
+                            <div class="mb-2 flex min-h-15 w-full items-center rounded-md border border-input px-3 py-1 text-sm shadow-xs shadow-input"
+                                v-html="props.museum.description[language.code] || '-'">
+                            </div>
                         </TabsContent>
                     </Tabs>
                 </div>

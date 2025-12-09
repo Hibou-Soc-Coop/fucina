@@ -60,6 +60,7 @@ export interface MuseumData {
         description?: Record<string, string>;
     }
     readonly images: Record<string, {
+        id: number;
         url: Record<string, string>;
         title: Record<string, string>;
         description?: Record<string, string>;

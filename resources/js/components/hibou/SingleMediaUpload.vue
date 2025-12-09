@@ -56,14 +56,6 @@ const currentFileName = computed(() => {
 /* ----------------------------------------------------------------
  *  WATCHERS
  * ---------------------------------------------------------------- */
-watch(
-    () => model.value,
-    (val) => {
-        // Cleanup old previews if needed?
-        // For simplicity, we keep localPreviews until unmount or manual removal
-    },
-    { deep: true },
-);
 
 /* ----------------------------------------------------------------
  *  HELPERS

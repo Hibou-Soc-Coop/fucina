@@ -2,8 +2,8 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useMediaControls } from '@vueuse/core'
 
-import PlayIcon from '@storage/assets/player.svg?url'
-import PauseIcon from '@storage/assets/pausa.svg?url'
+import PlayIcon from '@assets/player.svg?url'
+import PauseIcon from '@assets/pausa.svg?url'
 
 const props = defineProps<{ src: string }>()
 const emit = defineEmits(['close'])

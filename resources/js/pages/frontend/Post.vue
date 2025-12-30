@@ -5,15 +5,14 @@ import AudioPlayer from '@/components/ui/audio-player/AudioPlayer.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { PostData } from '@/types/flexhibition';
-import Close from '@storage/assets/chiudi.svg';
+import Close from '@assets/chiudi.svg';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
     post: PostData | PostData[];
 }>();
-console.log('Post prop:', props.post);
-// Support both array and object, but prefer object (single post)
+
 const post = computed(() => (Array.isArray(props.post) ? props.post[0] : props.post));
 const read = ref(false);
 const listen = ref(false);
@@ -39,17 +38,18 @@ function closeListen() {
     <div class="grid h-screen w-screen grid-rows-[15%_70%_15%]">
         <LanguageMenu />
         <div class="mx-auto mt-2 grid h-full w-[90%] grid-cols-2 grid-rows-[60%_20%_20%] justify-center *:border *:border-black">
+            <!-- FIXME: Le immagini dei post non dovrebbero essere hardcoded ma presi da DB -->
             <img :src="`/storage/assets/collections/${post.id}.png`" alt="" class="col-span-2 h-full w-full bg-[#dfdfdf] object-contain" />
             <div class="col-span-2 overflow-scroll pt-1 text-center text-lg font-bold" v-html="post.name[locale]"></div>
             <div class="grid items-center justify-center">
                 <button @click="openRead" class="p-1">
-                    <img src="@storage/assets/leggi.png" alt="" class="mx-auto my-2 h-14 w-14" />
+                    <img src="@assets/leggi.png" alt="" class="mx-auto my-2 h-14 w-14" />
                     <h2 class="text-xl font-bold">{{ t('read.Read') }}</h2>
                 </button>
             </div>
             <div class="grid items-center justify-center">
                 <button @click="openListen" class="p-1">
-                    <img src="@storage/assets/audio.png" alt="" class="mx-auto my-2 h-12 w-12" />
+                    <img src="@assets/audio.png" alt="" class="mx-auto my-2 h-12 w-12" />
                     <h2 class="text-xl font-bold">{{ t('listen.Listen') }}</h2>
                 </button>
             </div>

@@ -111,7 +111,7 @@ export interface ExhibitionData {
     readonly id: number;
     readonly name: Record<string, string>;
     readonly description?: Record<string, string>;
-    readonly images: Record <string,{
+    readonly images: Record<string, {
         id: number;
         url: Record<string, string>;
         title: Record<string, string>;
@@ -147,13 +147,13 @@ export interface PostData {
     readonly description?: Record<string, string>;
     readonly content?: Record<string, string>;
     readonly images: Record<
-    string,
-    {
-        id: number;
-        url: Record<string, string>;
-        title: Record<string, string>;
-        description?: Record<string, string>;
-    }
+        string,
+        {
+            id: number;
+            url: Record<string, string>;
+            title: Record<string, string>;
+            description?: Record<string, string>;
+        }
     >;
     readonly audio: {
         url: Record<string, string>;
@@ -162,6 +162,16 @@ export interface PostData {
     };
     readonly exhibition_id: number;
     readonly exhibition_name?: Record<string, string>;
+}
+
+export interface Post {
+    readonly id: number;
+    readonly name: Record<string, string>;
+    readonly description?: Record<string, string>;
+    readonly content?: Record<string, string>;
+    readonly images: Record<string, string>[] | null;
+    readonly audio: Record<string, string> | null;
+    readonly exhibition_id: number;
 }
 
 /** Opera della mostra */

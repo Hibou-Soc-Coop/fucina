@@ -7,6 +7,7 @@
             "title": "Collezione"
         },
         "menu": {
+            "menu": "MENU",
             "home": "HOME",
             "collection": "COLLEZIONE",
             "contact": "CONTATTI"
@@ -32,6 +33,7 @@
             "title": "Collection"
         },
         "menu": {
+            "menu": "MENU",
             "home": "HOME",
             "collection": "COLLECTION",
             "contact": "CONTACT"

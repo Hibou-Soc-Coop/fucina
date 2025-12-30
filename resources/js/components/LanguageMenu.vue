@@ -37,7 +37,7 @@ function changeLanguage(code: string) {
             </span>
             <div
                 :class="[
-                    'absolute mt-50 min-w-20 origin-top overflow-hidden rounded bg-white p-4 shadow-lg transition-all duration-500',
+                    'absolute mt-40 min-w-20 origin-top overflow-hidden rounded bg-white p-4 shadow-lg transition-all duration-500',
                     open ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0',
                 ]"
             >

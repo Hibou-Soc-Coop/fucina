@@ -4,13 +4,13 @@ import LanguageMenu from '@/components/LanguageMenu.vue';
 import AudioPlayer from '@/components/ui/audio-player/AudioPlayer.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import type { PostData } from '@/types/flexhibition';
+import type { Post } from '@/types/flexhibition';
 import Close from '@assets/chiudi.svg';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
-    post: PostData | PostData[];
+    post: Post;
 }>();
 
 const post = computed(() => (Array.isArray(props.post) ? props.post[0] : props.post));
@@ -38,7 +38,6 @@ function closeListen() {
     <div class="grid h-screen w-screen grid-rows-[15%_70%_15%]">
         <LanguageMenu />
         <div class="mx-auto mt-2 grid h-full w-[90%] grid-cols-2 grid-rows-[60%_20%_20%] justify-center *:border *:border-black">
-            <!-- FIXME: Le immagini dei post non dovrebbero essere hardcoded ma presi da DB -->
             <img :src="post.images[0][locale] || post.images[0]['it']" alt="" class="col-span-2 h-full w-full bg-[#dfdfdf] object-contain" />
             <div class="col-span-2 overflow-scroll pt-1 text-center text-lg font-bold" v-html="post.name[locale] || post.name['it']"></div>
             <div class="grid items-center justify-center">

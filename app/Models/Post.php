@@ -62,7 +62,7 @@ class Post extends Model
     }
       public function Exhibition(): BelongsTo
     {
-        return $this->belongsTo(exhibition::class);
+        return $this->belongsTo(Exhibition::class, 'exhibition_id');
     }
 
     /**

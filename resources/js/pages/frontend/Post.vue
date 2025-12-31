@@ -14,6 +14,7 @@ const props = defineProps<{
 }>();
 
 const post = computed(() => (Array.isArray(props.post) ? props.post[0] : props.post));
+console.log(post.value);
 const read = ref(false);
 const listen = ref(false);
 
@@ -42,7 +43,7 @@ function closeListen() {
             <div class="col-span-2 overflow-scroll pt-1 text-center text-lg font-bold" v-html="post.name[locale] || post.name['it']"></div>
             <div class="grid items-center justify-center">
                 <button @click="openRead" class="p-1">
-                    <img src="@assets/leggi.png" alt="" class="mx-auto my-2 h-11 w-14" />
+                    <img src="@assets/leggi.png" alt="" class="mx-auto my-2 h-11 w-12" />
                     <h2 class="text-xl font-bold">{{ t('read.Read') }}</h2>
                 </button>
             </div>
@@ -58,7 +59,7 @@ function closeListen() {
         </div>
     </div>
 
-    <div v-if="read" class="fixed top-0 left-0 grid h-screen w-screen grid-rows-[10%_90%] bg-[#1e1e1e]">
+    <div v-if="read" class="fixed top-0 left-0 grid h-dvh w-screen grid-rows-[10%_90%] bg-[#1e1e1e] pb-6">
         <div class="mt-4 flex flex-col items-center">
             <Button @click="closeRead" class="h-8 w-32 rounded-full bg-black p-5 text-xl text-white" variant="outline">
                 <Close class="mb-1 inline-block" />{{ t('close.Close') }}
@@ -69,13 +70,13 @@ function closeListen() {
             <div class="px-2 text-justify" v-html="post.description?.[locale] || post.description?.['it']"></div>
         </ScrollArea>
     </div>
-    <div v-if="listen" class="fixed top-0 left-0 grid h-screen w-screen grid-rows-[10%_90%] bg-[#1e1e1e]">
+    <div v-if="listen" class="fixed top-0 left-0 grid h-dvh w-screen grid-rows-[10%_90%] bg-[#1e1e1e]">
         <div class="mt-4 flex flex-col items-center">
             <Button @click="closeListen" class="h-8 w-32 rounded-full bg-black p-5 text-xl text-white" variant="outline">
                 <Close class="mb-1 inline-block" /> {{ t('close.Close') }}
             </Button>
         </div>
-        <AudioPlayer v-if="post.audio?.[locale]" :src="post.audio[locale] || post.audio['it']" />
+        <AudioPlayer v-if="post.audio" :src="post.audio[locale] || post.audio['it']" />
         <AudioPlayer v-else :src="`@assets/audio.mp3`" />
     </div>
 </template>

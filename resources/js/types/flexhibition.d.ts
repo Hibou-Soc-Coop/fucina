@@ -172,6 +172,7 @@ export interface Post {
     readonly images: Record<string, string>[] | null;
     readonly audio: Record<string, string> | null;
     readonly exhibition_id: number;
+    readonly museum_id: number;
 }
 
 /** Opera della mostra */

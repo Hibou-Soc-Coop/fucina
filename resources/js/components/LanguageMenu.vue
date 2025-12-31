@@ -25,7 +25,7 @@ function changeLanguage(code: string) {
     }
     const newUrl = `${splitUrl.join('/')}/${code}`;
     locale.value = code;
-    history.pushState(null, page.props.name, newUrl);
+    history.replaceState(null, page.props.name, newUrl);
 }
 </script>
 <template>

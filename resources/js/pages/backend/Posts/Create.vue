@@ -21,12 +21,11 @@ const primaryLanguage = page.props.primaryLanguage as Language | null;
 const primaryLanguageCode = primaryLanguage?.code || 'it';
 
 const props = defineProps<{ exhibitions: ExhibitionData[] }>();
-console.log("exhibitions:", props.exhibitions);
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Posts',
-        href: '#',
+        href: postsRoutes.index().url,
     },
     {
         title: 'Create',

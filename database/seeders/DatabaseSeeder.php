@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+        User::factory()->withoutTwoFactor()->create([
             'name' => 'AdminOwl',
             'email' => 'digital@hiboucoop.org',
             'password' => bcrypt('gatti-compreso-leoni'),

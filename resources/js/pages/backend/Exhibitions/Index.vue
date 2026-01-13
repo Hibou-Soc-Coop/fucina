@@ -47,7 +47,7 @@ function truncate(text: string | undefined, maxLength: number): string {
                        :id="exhibition.id"
                        :title="exhibition.name[primaryLanguageCode]"
                        :excerpt="truncate(exhibition.description?.[primaryLanguageCode], 60)"
-                       :thumbnail="`/storage/${exhibition.images?.[0].url[primaryLanguageCode]}`"></Card>
+                       :thumbnail="exhibition.images?.[0]?.url?.[primaryLanguageCode] ? `/storage/${exhibition.images[0].url[primaryLanguageCode]}` : '/storage/sample-data/images/placeholder.jpg'"></Card>
                 <div v-if="props.exhibitions.length === 0" class="col-span-full py-8 text-muted-foreground text-center">
                     No exhibitions found.
                 </div>

@@ -17,6 +17,9 @@ const post = computed(() => (Array.isArray(props.post) ? props.post[0] : props.p
 console.log(post.value);
 const read = ref(false);
 const listen = ref(false);
+const nameLength = computed(() => {
+    return (post.value.name['it'] || '').length;
+});
 
 const { locale, t } = useI18n();
 
@@ -40,7 +43,9 @@ function closeListen() {
         <LanguageMenu />
         <div class="mx-auto mt-2 grid h-full w-[90%] grid-cols-2 grid-rows-[60%_20%_20%] justify-center *:border *:border-black">
             <img :src="post.images[0][locale] || post.images[0]['it']" alt="" class="col-span-2 h-full w-full bg-[#dfdfdf] object-contain" />
-            <div class="col-span-2 overflow-scroll pt-1 text-center text-lg font-bold" v-html="post.name[locale] || post.name['it']"></div>
+            <!-- <div class="col-span-2 overflow-scroll pt-1 text-center text-lg font-bold" v-html="post.name[locale] || post.name['it']"></div> -->
+            <div v-if="nameLength < 50" class="col-span-2 flex items-center justify-center h-full text-lg font-bold" v-html="post.name[locale] || post.name['it']"></div>
+            <div v-else class="col-span-2 overflow-scroll pt-8 text-center text-lg font-bold" v-html="post.name[locale] || post.name['it']"></div>
             <div class="grid items-center justify-center">
                 <button @click="openRead" class="p-1">
                     <img src="@assets/leggi.png" alt="" class="mx-auto my-2 h-11 w-12" />

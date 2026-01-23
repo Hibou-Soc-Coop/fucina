@@ -48,7 +48,7 @@ function truncate(text: string | undefined, maxLength: number): string {
                        :id="post.id"
                        :title="post.name[primaryLanguageCode]"
                        :excerpt="truncate(post.description?.[primaryLanguageCode], 60)"
-                       :thumbnail="undefined"></Card>
+                       :thumbnail="post.images?.[0]?.url?.[primaryLanguageCode] ? `/storage/${post.images[0].url[primaryLanguageCode]}` : '/storage/sample-data/images/placeholder.jpg'"></Card>
                 <div v-if="props.posts.length === 0" class="col-span-full py-8 text-muted-foreground text-center">
                     No posts found.
                 </div>

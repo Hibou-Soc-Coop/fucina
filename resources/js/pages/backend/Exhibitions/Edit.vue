@@ -21,8 +21,8 @@ const languages = page.props.languages as Language[];
 console.log("museums:", props.museums);
 const primaryLanguage = page.props.primaryLanguage as Language;
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Mostra', href: exhibitionRoutes.index().url },
-    { title: 'Modifica', href: '#' },
+    { title: 'Exhibitions', href: exhibitionRoutes.index().url },
+    { title: 'Edit', href: '#' },
 ];
 
 const deleteExhibition = () => {
@@ -80,8 +80,8 @@ function submit() {
                 <div class="grid grid-cols-[1fr_4fr] grid-rows-[auto_auto] gap-4">
                     <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">
                         <Label class="block text-lg font-semibold"> Audio Mostra </Label>
-                        <SingleMediaUpload v-model="form.audio" v-if="props.exhibition.audio.url[primaryLanguage.code]"
-                            :media_preview="`/storage/${props.exhibition.audio.url[primaryLanguage.code]}`" :is-readonly="false"
+                        <SingleMediaUpload v-model="form.audio" v-if="props.exhibition.audio"
+                            :media_preview="`/storage/${props.exhibition.audio?.url[primaryLanguage.code]}`" :is-readonly="false"
                             :accept="'audio/*'" :max-file-size="10 * 1024 * 1024" />
                         <div v-else class="mt-2 w-full rounded-md border border-gray-300 bg-gray-100">
                             <p class="p-4 text-sm text-gray-500">Nessun audio disponibile</p>

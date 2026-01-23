@@ -17,7 +17,6 @@ use Spatie\Translatable\HasTranslations;
  * @property \Carbon\Carbon $updated_at
  *
  * @property-read Media|null $audio
- * @property-read QrCode|null $qrCode
  */
 class Post extends Model
 {

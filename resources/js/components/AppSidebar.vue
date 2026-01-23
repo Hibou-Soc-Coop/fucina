@@ -11,7 +11,7 @@ import exhibitionsRoutes from '@/routes/exhibitions';
 import postsRoutes from '@/routes/posts';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { Folder, Landmark, Eye, LayoutGrid } from 'lucide-vue-next';
+import { Folder, Landmark, Eye, LayoutGrid, Image } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -32,7 +32,7 @@ const mainNavItems: NavItem[] = [
     },{
         title: 'Opere',
         href: postsRoutes.index(),
-        icon: Eye,
+        icon: Image,
     },
 ];
 

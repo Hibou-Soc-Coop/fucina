@@ -291,6 +291,7 @@ class PostController extends Controller
             return collect($image->getTranslations('url'))->map(fn($url) => asset('storage' . $url));
         });
         $post['exhibition_id'] = $postRecord->exhibition_id;
+        $post['museum_id'] = $museumId;
 
         return Inertia::render('frontend/Post', ['post' => $post]);
     }

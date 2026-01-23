@@ -49,7 +49,7 @@ function truncate(text: string | undefined, maxLength: number): string {
                        :id="museum.id"
                        :title="museum.name[primaryLanguageCode]"
                        :excerpt="truncate(museum.description[primaryLanguageCode], 60)"
-                       :thumbnail="`/storage/${museum.logo.url ? museum.logo.url[primaryLanguageCode] : undefined}`"></Card>
+                       :thumbnail="museum.logo.url ? `/storage/${museum.logo.url[primaryLanguageCode]}` : '/storage/sample-data/images/placeholder.jpg'"></Card>
                 <div v-if="props.museums.length === 0" class="col-span-full py-8 text-muted-foreground text-center">
                     No museums found.
                 </div>

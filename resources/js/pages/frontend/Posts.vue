@@ -22,7 +22,7 @@ const { t, locale } = useI18n();
         <div class="h-full overflow-y-scroll bg-[#eccdc3] p-8 pb-24">
             <div v-for="post in posts" :key="post.id" class="mb-4 min-h-50 min-w-full cursor-pointer rounded-[40%] bg-white">
                 <img
-                    class="h-64 w-full rounded-[40%] object-cover"
+                    class="h-72 w-full rounded-[40%] object-cover object-top"
                     :key="post.id"
                     :src="post.images?.[0][locale] || post.images?.[0]['it']"
                     alt=""

@@ -13,13 +13,12 @@ const page = usePage();
 const languages = page.props.languages as Language[];
 const primaryLanguage = page.props.primaryLanguage as Language;
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Mostra', href: exhibitionsRoutes.index().url },
-    { title: 'Dettaglio', href: '#' },
+    { title: 'Exhibitions', href: exhibitionsRoutes.index().url },
+    { title: 'Details', href: '#' },
 ];
 
 const props = defineProps<{ exhibition: ExhibitionData }>();
 
-console.log("Exhibition imasges Props:", props.exhibition.images);
 
 const deleteExhibition = () => {
     if (confirm('Sei sicuro di voler eliminare questa mostra?')) {

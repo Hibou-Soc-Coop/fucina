@@ -13,8 +13,8 @@ const page = usePage();
 const languages = page.props.languages as Language[];
 const primaryLanguage = page.props.primaryLanguage as Language;
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Opera', href: postsRoutes.index().url },
-    { title: 'Dettaglio', href: '#' },
+    { title: 'Posts', href: postsRoutes.index().url },
+    { title: 'Details', href: '#' },
 ];
 
 const props = defineProps<{ post: PostData }>();
@@ -31,8 +31,8 @@ const deletePost = () => {
 <template>
     <Head :title="props.post.name[primaryLanguage.code] + ' - Dettaglio'" />
     <AppLayout :breadcrumbs="breadcrumbs">
-        <PageLayout title="Dettaglio Opera">
-            <template #button>
+        <PageLayout title="Informazioni dell'Opera">
+            <template #button class="text-right">
                 <Button @click="router.visit(postsRoutes.edit.url(props.post.id))" color-scheme="edit" class="mr-2">
                     Modifica Opera
                 </Button>
@@ -43,7 +43,7 @@ const deletePost = () => {
             <div class="grid grid-cols-[1fr_4fr] grid-rows-[auto_auto] gap-4">
                 <div class="col-start-1 col-end-2 rounded-lg border p-4 shadow">
                     <Label class="block text-lg font-semibold"> Audio Opera </Label>
-                    <!-- <audio
+                    <audio
                         v-if="props.post.audio.url[primaryLanguage.code]"
                         :src="`/storage/${props.post.audio.url[primaryLanguage.code]}`"
                         controls
@@ -51,10 +51,10 @@ const deletePost = () => {
                     />
                     <div v-else class="mt-2 w-full rounded-md border border-gray-300 bg-gray-100">
                         <p class="p-4 text-sm text-gray-500">Nessun audio disponibile</p>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="col-start-2 col-end-3 row-start-1 row-end-3 rounded-lg border p-4 shadow">
-                    <h2 class="mb-4 text-lg font-semibold">Informazioni Mostra</h2>
+                    <h2 class="mb-4 text-lg font-semibold">Detaglio opera</h2>
                     <Tabs default-value="it" :unmount-on-hide="false" class="grid w-full grid-cols-[15%_auto] gap-8" orientation="vertical">
                         <TabsList class="grid h-fit w-full grid-cols-1 gap-2">
                             <template v-for="language in languages" :key="language.code">

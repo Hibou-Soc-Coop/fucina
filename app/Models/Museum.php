@@ -3,26 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-/**
- * @property int $id
- * @property array $name
- * @property array|null $description
- * @property int|null $logo_id
- * @property int|null $audio_id
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- *
- * @property-read Media|null $logo
- * @property-read Media|null $audio
- */
-class Museum extends Model
+class Museum extends Model implements HasMedia
 {
     use HasTranslations;
+    use InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -32,8 +22,6 @@ class Museum extends Model
     protected $fillable = [
         'name',
         'description',
-        'logo_id',
-        'audio_id',
     ];
 
     /**
@@ -46,49 +34,43 @@ class Museum extends Model
         'description',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function registerMediaCollections(): void
     {
-        return [
-            'name' => 'array',
-            'description' => 'array',
-        ];
+        $this->addMediaCollection('logo')->registerMediaConversions(function (Media $media) {
+            $this->addMediaConversion('thumb')
+                ->width(config('media.dimensions.thumbnail.width'))
+                ->height(config('media.dimensions.thumbnail.height'))
+                ->sharpen(10)
+                ->nonQueued();
+            $this->addMediaConversion(name: 'full')
+                ->width(config('media.dimensions.full.width'))
+                ->height(config('media.dimensions.full.height'))
+                ->sharpen(10)
+                ->nonQueued();
+        });
+        $this->addMediaCollection('images')->registerMediaConversions(function (Media $media) {
+            $this->addMediaConversion('thumb')
+                ->width(config('media.dimensions.thumbnail.width'))
+                ->height(config('media.dimensions.thumbnail.height'))
+                ->sharpen(10)
+                ->nonQueued();
+            $this->addMediaConversion(name: 'full')
+                ->width(config('media.dimensions.full.width'))
+                ->height(config('media.dimensions.full.height'))
+                ->sharpen(10)
+                ->nonQueued();
+        });
+        $this->addMediaCollection('audio');
+        $this->addMediaCollection('qrcode');
     }
 
-    /**
-     * Get the logo media.
-     */
-    public function logo(): BelongsTo
+    public function getAudio(string $lang = null)
     {
-        return $this->belongsTo(Media::class, 'logo_id');
-    }
-
-    /**
-     * Get the audio media.
-     */
-    public function audio(): BelongsTo
-    {
-        return $this->belongsTo(Media::class, 'audio_id');
-    }
-
-    /**
-     * Get all images for this museum.
-     */
-    public function images(): BelongsToMany
-    {
-        return $this->belongsToMany(Media::class, 'museum_images');
-    }
-
-    /**
-     * Get all QR codes for this museum.
-     */
-    public function qrCodes(): HasMany
-    {
-        return $this->hasMany(QrCode::class);
+        if (!$lang) {
+            return $this->getMedia('audio')->first(fn(Media $media) => $media->getCustomProperty('lang') === app()->getLocale());
+        } else {
+            return $this->getMedia('audio')->first(fn(Media $media) => $media->getCustomProperty('lang') === $lang);
+        }
     }
 
     /**

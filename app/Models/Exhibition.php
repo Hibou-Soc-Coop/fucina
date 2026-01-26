@@ -6,28 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Translatable\HasTranslations;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-/**
- * @property int $id
- * @property int|null $museum_id
- * @property int|null $qr_code_id
- * @property array $name
- * @property array|null $description
- * @property array|null $credits
- * @property int|null $audio_id
- * @property \Carbon\CarbonInterface|null $start_date
- * @property \Carbon\CarbonInterface|null $end_date
- * @property bool $is_archived
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- *
- * @property-read Museum|null $museum
- * @property-read QrCode|null $qrCode
- * @property-read Media|null $audio
- */
 class Exhibition extends Model
 {
     use HasTranslations;
+    use InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -36,11 +22,9 @@ class Exhibition extends Model
      */
     protected $fillable = [
         'museum_id',
-        'qr_code_id',
         'name',
         'description',
         'credits',
-        'audio_id',
         'start_date',
         'end_date',
         'is_archived',
@@ -65,13 +49,28 @@ class Exhibition extends Model
     protected function casts(): array
     {
         return [
-            'name' => 'array',
-            'description' => 'array',
-            'credits' => 'array',
             'start_date' => 'date',
             'end_date' => 'date',
             'is_archived' => 'boolean',
         ];
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('images')->registerMediaConversions(function (Media $media) {
+            $this->addMediaConversion('thumb')
+                ->width(config('media.dimensions.thumbnail.width'))
+                ->height(config('media.dimensions.thumbnail.height'))
+                ->sharpen(10)
+                ->nonQueued();
+            $this->addMediaConversion(name: 'full')
+                ->width(config('media.dimensions.full.width'))
+                ->height(config('media.dimensions.full.height'))
+                ->sharpen(10)
+                ->nonQueued();
+        });
+        $this->addMediaCollection('audio');
+        $this->addMediaCollection('qrcode');
     }
 
     /**
@@ -80,30 +79,6 @@ class Exhibition extends Model
     public function museum(): BelongsTo
     {
         return $this->belongsTo(Museum::class);
-    }
-
-    /**
-     * Get the QR code for this exhibition.
-     */
-    public function qrCode(): BelongsTo
-    {
-        return $this->belongsTo(QrCode::class);
-    }
-
-    /**
-     * Get the audio media.
-     */
-    public function audio(): BelongsTo
-    {
-        return $this->belongsTo(Media::class, 'audio_id');
-    }
-
-    /**
-     * Get all images for this exhibition.
-     */
-    public function images(): BelongsToMany
-    {
-        return $this->belongsToMany(Media::class, 'exhibition_images');
     }
 
     /**

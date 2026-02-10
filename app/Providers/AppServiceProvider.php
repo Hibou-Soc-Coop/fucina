@@ -17,9 +17,9 @@ class AppServiceProvider extends ServiceProvider
             return new SettingsService();
         });
 
-        $this->app->singleton(MediaService::class, function ($app) {
-            return new MediaService();
-        });
+        // $this->app->singleton(MediaService::class, function ($app) {
+        //     return new MediaService();
+        // });
     }
 
     /**

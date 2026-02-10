@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('museum_images', function (Blueprint $table) {
-            $table->foreignId('museum_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('media_id')->constrained()->cascadeOnDelete();
+        Schema::create('sections', function (Blueprint $table) {
+            $table->id();
+            $table->json('title');
+            $table->json('description')->nullable();
             $table->timestamps();
-
-            $table->primary(['museum_id', 'media_id']);
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('museum_images');
+        Schema::dropIfExists('sections');
     }
 };

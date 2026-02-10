@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->withoutTwoFactor()->create([
+        User::factory()->create([
             'name' => 'AdminOwl',
             'email' => 'digital@hiboucoop.org',
             'password' => bcrypt('gatti-compreso-leoni'),
@@ -24,9 +24,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             LanguageSeeder::class,
-            MuseumSeeder::class,
-            ExhibitionSeeder::class,
-            PostSeeder::class,
             SettingSeeder::class,
         ]);
     }

@@ -1,10 +1,8 @@
 <?php
 
 use App\Http\Controllers\LanguageController;
-use App\Http\Controllers\MediaController;
-use App\Http\Controllers\MuseumController;
-use App\Http\Controllers\ExhibitionController;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\GlossaryController;
+use App\Http\Controllers\SectionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,11 +16,8 @@ Route::prefix('backend')->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('backend/Dashboard');
     })->middleware(['auth', 'verified'])->name('dashboard');
-
-    Route::resource('languages', LanguageController::class)->middleware(['auth', 'verified']);
-    Route::resource('museums', MuseumController::class)->middleware(['auth', 'verified']);
-    Route::resource('exhibitions', ExhibitionController::class)->middleware(['auth', 'verified']);
-    Route::resource('posts', PostController::class)->middleware(['auth', 'verified']);
+    Route::resource('sections', SectionController::class)->middleware(['auth', 'verified']);
+    Route::resource('glossaries', GlossaryController::class)->middleware(['auth', 'verified']);
 });
 
 // Route::get('museum/{museumId}/{language?}', function ($museumId = null, $language = 'it') {

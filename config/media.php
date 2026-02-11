@@ -20,6 +20,9 @@ return [
         'audio' => [
             'max' => 4096,
         ],
+        'video' => [
+            'max' => 20480,
+        ],
     ],
     'dimensions' => [
         'thumbnail' => [
@@ -42,5 +45,6 @@ return [
     'types' => [
         'image' => 'jpeg,jpg,png,gif',
         'audio' => 'mp3',
+        'video' => 'mp4',
     ],
 ];

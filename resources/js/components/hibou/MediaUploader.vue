@@ -3,7 +3,7 @@ import { ref, computed, onUnmounted } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { byPrefixAndName } from '@awesome.me/kit-b4e21ddbe6/icons'
 import { ArtifactImage } from '@/types/hibou'
-import Label from '../label/Label.vue'
+import Label from '../ui/label/Label.vue'
 
 // ======================
 // Costanti configurabili

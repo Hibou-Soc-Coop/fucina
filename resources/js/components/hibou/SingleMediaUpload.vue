@@ -1,6 +1,6 @@
 <!-- HMediaUploader.vue -->
 <script setup lang="ts">
-import { MAX_AUDIO_SIZE, MAX_IMAGE_HEIGHT, MAX_IMAGE_SIZE, MAX_IMAGE_WIDTH } from '@/constants/mediaSettings';
+import { MAX_AUDIO_SIZE, MAX_VIDEO_SIZE, MAX_IMAGE_HEIGHT, MAX_IMAGE_SIZE, MAX_IMAGE_WIDTH } from '@/constants/mediaSettings';
 import { type Language, type MediaData } from '@/types/flexhibition';
 import { usePage } from '@inertiajs/vue3';
 import { FileUp, Trash2 } from 'lucide-vue-next';
@@ -41,6 +41,7 @@ const error = ref<string | null>(null);
 
 const isImage = computed(() => props.accept.includes('image'));
 const isAudio = computed(() => props.accept.includes('audio'));
+const isVideo = computed(() => props.accept.includes('video'));
 
 const currentPreview = computed(() => {
     if (localPreviews.value[props.currentLang]) return localPreviews.value[props.currentLang];
@@ -129,6 +130,13 @@ async function onFileChange(e: Event) {
     } else if (isAudio.value) {
         if (finalFile.size > MAX_AUDIO_SIZE) {
             const msg = `Il file supera il limite di ${(MAX_AUDIO_SIZE / 1024 / 1024).toFixed(1)} MB`;
+            error.value = msg;
+            emit('invalid', msg);
+            return;
+        }
+    } else if (isVideo.value) {
+        if (finalFile.size > MAX_VIDEO_SIZE) {
+            const msg = `Il file supera il limite di ${(MAX_VIDEO_SIZE / 1024 / 1024).toFixed(1)} MB`;
             error.value = msg;
             emit('invalid', msg);
             return;
@@ -259,6 +267,7 @@ onUnmounted(() => {
             <template v-if="currentPreview">
                 <img v-if="isImage" :src="currentPreview" alt="Anteprima immagine" class="max-h-48 max-w-full rounded object-contain" />
                 <audio v-else-if="isAudio" :src="currentPreview" controls class="w-full" />
+                <video v-else-if="isVideo" :src="currentPreview" controls class="max-h-48 max-w-full rounded object-contain" />
             </template>
 
             <template v-if="!currentPreview && !isReadonly">
@@ -292,10 +301,16 @@ onUnmounted(() => {
                             {{ languages.find((lang) => lang.code === currentLang)?.name || currentLang }}.<br />
                             Clicca o trascina qui per caricare.</span
                         >
+                        <span v-else-if="isVideo"
+                            >Nessun video caricato per
+                            {{ languages.find((lang) => lang.code === currentLang)?.name || currentLang }}.<br />
+                            Clicca o trascina qui per caricare.</span
+                        >
                     </template>
                     <template v-else>
                         <span v-if="isImage">Nessun file immagine caricato.<br />Clicca o trascina qui per caricare.</span>
                         <span v-else-if="isAudio">Nessun file audio caricato.<br />Clicca o trascina qui per caricare.</span>
+                        <span v-else-if="isVideo">Nessun file video caricato.<br />Clicca o trascina qui per caricare.</span>
                     </template>
                 </div>
             </template>

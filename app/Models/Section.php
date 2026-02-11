@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Section extends Model implements HasMedia
 {
@@ -16,16 +17,30 @@ class Section extends Model implements HasMedia
 
     protected $guarded = [];
 
-    public $translatable = ['title', 'description'];
+    public array $translatable = ['title', 'subtitle', 'description', 'audio', 'qrcode'];
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('images');
+        $this->addMediaCollection('image');
+        $this->addMediaCollection('video');
+        $this->addMediaCollection('audio');
+        $this->addMediaCollection('qrcode');
 
-        $this->addMediaCollection('video')
-            ->singleFile();
-
-        $this->addMediaCollection('audio')
-            ->singleFile();
+    }
+    public function getAudio(?string $lang = null)
+    {
+        if (!$lang) {
+            return $this->getMedia('audio')->first(fn(Media $media) => $media->getCustomProperty('lang') === app()->getLocale());
+        } else {
+            return $this->getMedia('audio')->first(fn(Media $media) => $media->getCustomProperty('lang') === $lang);
+        }
+    }
+    public function getQrCode(?string $lang = null)
+    {
+        if (!$lang) {
+            return $this->getMedia('qrcode')->first(fn(Media $media) => $media->getCustomProperty('lang') === app()->getLocale());
+        } else {
+            return $this->getMedia('qrcode')->first(fn(Media $media) => $media->getCustomProperty('lang') === $lang);
+        }
     }
 }

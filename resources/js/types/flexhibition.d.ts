@@ -35,158 +35,69 @@ export interface MediaInfo {
     >;
 }
 
-/** Museo (dati base, riferimenti a media) */
-export interface MuseumRecord {
+/** Sezione (dati base, riferimenti a media) */
+export interface SectionRecord {
     readonly id: number;
-    readonly name: string;
+    readonly title: string;
+    readonly subtitle: string;
     readonly description: string;
-    readonly logo_id?: number;
+    readonly video_id: number;
     readonly audio_id?: number;
+    readonly image_id: number;
+    readonly qrcode_id?: number;
+
+
 }
 
-/** Informazioni multilingua su un museo */
-export interface MuseumData {
+/** Informazioni multilingua su una sezione */
+export interface SectionData {
     readonly id: string;
-    readonly name: Record<string, string>;
+    readonly title: Record<string, string>;
+    readonly subtitle: Record<string, string>;
     readonly description: Record<string, string>;
-    readonly logo: {
+    readonly video: {
+        id: number | null;
         url: Record<string, string>;
         title: Record<string, string>;
-        description?: Record<string, string>;
-    };
-    readonly audio: {
-        url: Record<string, string>;
-        title: Record<string, string>;
-        description?: Record<string, string>;
     }
-    readonly images: Record<string, {
+    readonly audio: {
+        id: number | null;
+        title: Record<string, string>;
+        url: Record<string, string>;
+    }
+    readonly image: Record<string, {
         id: number;
-        url: Record<string, string>;
         title: Record<string, string>;
-        description?: Record<string, string>;
+        url: Record<string, string>;
     }>;
-}
-
-export interface MuseumUploadData extends MuseumData {
-    readonly logo: {
-        id: number | null;
-        file?: Record<string, File>;
-        url: Record<string, string>;
-        title: Record<string, string>;
-        description?: Record<string, string>;
-    };
-
-    readonly audio: {
-        id: number | null;
-        file?: Record<string, File>;
-        url: Record<string, string>;
-        title: Record<string, string>;
-        description?: Record<string, string>;
-    };
-
-    readonly images: Record<string, {
-        id: number | null;
-        file?: Record<string, File>;
-        url: Record<string, string>;
-        title: Record<string, string>;
-        description?: Record<string, string>;
-    }>;
-}
-
-/** Mostra (dati base, riferimenti a media) */
-export interface ExhibitionRecord {
-    readonly id: number;
-    readonly name: string;
-    readonly description?: string;
-    readonly image_id?: number[];
-    readonly audio_id?: number;
-    readonly start_date?: string;
-    readonly end_date?: string;
-    readonly is_archived: boolean;
-    readonly museum_id: number;
-}
-
-/** Informazioni multilingua su una mostra */
-export interface ExhibitionData {
-    readonly id: number;
-    readonly name: Record<string, string>;
-    readonly description?: Record<string, string>;
-    readonly images: Record<string, {
+    readonly qrcode: Record<string, {
         id: number;
-        url: Record<string, string>;
         title: Record<string, string>;
-        description?: Record<string, string>;
+        url: Record<string, string>;
     }>;
-    readonly audio: {
-        url: Record<string, string>;
+}
+
+export interface SectionUploadData extends SectionData {
+    readonly video: {
+        id: number | null;
+        file?: Record<string, File>;
         title: Record<string, string>;
-        description?: Record<string, string>;
-    };
-    readonly start_date?: string;
-    readonly end_date?: string;
-    readonly is_archived: boolean;
-    readonly museum_id: number;
-    readonly museum_name?: Record<string, string>;
-}
-
-
-/** Opera*/
-export interface PostRecord {
-    readonly id: number;
-    readonly name: number;
-    readonly description?: number;
-    readonly image_id?: number;
-    readonly audio_id?: number;
-    readonly exhibition_id?: number;
-}
-
-/** Informazioni multilingua su un' Opera */
-export interface PostData {
-    readonly id: number;
-    readonly name: Record<string, string>;
-    readonly description?: Record<string, string>;
-    readonly content?: Record<string, string>;
-    readonly images: Record<
-        string,
-        {
-            id: number;
-            url: Record<string, string>;
-            title: Record<string, string>;
-            description?: Record<string, string>;
-        }
-    >;
-    readonly audio: {
         url: Record<string, string>;
-        title: Record<string, string>;
-        description?: Record<string, string>;
     };
-    readonly exhibition_id: number;
-    readonly exhibition_name?: Record<string, string>;
-}
 
-export interface Post {
-    readonly id: number;
-    readonly name: Record<string, string>;
-    readonly description?: Record<string, string>;
-    readonly content?: Record<string, string>;
-    readonly images: Record<string, string>[] | null;
-    readonly audio: Record<string, string> | null;
-    readonly exhibition_id: number;
-    readonly museum_id: number;
-}
+    readonly audio: {
+        id: number | null;
+        file?: Record<string, File>;
+        title: Record<string, string>;
+        url: Record<string, string>;
+    };
 
-/** Opera della mostra */
-export interface ExhibitionPost {
-    readonly exhibition_id: number;
-    readonly exhibition_post_id: number;
-    readonly museum_point_id?: number;
-}
-
-/** Informazioni multilingua su un' Opera */
-export interface ExhibitionPostInfo {
-    readonly exhibition_id: string;
-    readonly exhibition_post_id: string;
-    readonly museum_point_id?: string;
+    readonly images: Record<string, {
+        id: number | null;
+        file?: Record<string, File>;
+        title: Record<string, string>;
+        url: Record<string, string>;
+    }>;
 }
 
 export interface MediaData extends Record<string, any> {

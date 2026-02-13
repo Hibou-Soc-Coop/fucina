@@ -3,11 +3,11 @@ import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/index';
 // import languagesRoutes from '@/routes/languages';
 // import mediaRoutes from '@/routes/media';
-import sectionsRoutes from '@/routes/sections';
-import glossariesRoutes from '@/routes/glossaries';
+import sectionsRoutes from '@/routes/sections/index';
+import termsRoutes from '@/routes/terms/index';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
 import { Folder, Landmark, Book, LayoutGrid, Image } from 'lucide-vue-next';
@@ -26,7 +26,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Glossary',
-        href: glossariesRoutes.index(),
+        href: termsRoutes.index(),
         icon: Book,
     }
 ];

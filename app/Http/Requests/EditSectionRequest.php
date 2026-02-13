@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSectionRequest extends FormRequest
+class EditSectionRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -29,9 +29,8 @@ class StoreSectionRequest extends FormRequest
         $validationRules['video'] = ['nullable', 'array'];
         $validationRules['video.id'] = ['nullable', 'integer', 'exists:media,id'];
         $validationRules['video.file.*'] = ['nullable', 'file', "mimes:mp4,mov,avi,wmv", "max:204800"];
-        $validationRules['qrcode'] = ['nullable', 'array'];
-        $validationRules['qrcode.id'] = ['nullable', 'integer', 'exists:media,id'];
-        $validationRules['qrcode.file.*'] = ['nullable', 'file', "mimes:png", "max:2048", "dimensions:max_width=1000,max_height=1000"];
+        
+        // Remove QR code validation as it's not editable
 
         return $validationRules;
 
@@ -56,10 +55,6 @@ class StoreSectionRequest extends FormRequest
         $messages['audio.file.*.mimes'] = 'L\'audio deve essere in formato mp3, wav o ogg.';
         $messages['audio.file.*.max'] = 'L\'audio non può superare i 10MB.';
         $messages['audio.file.*.uploaded'] = 'Caricamento fallito. Il file potrebbe essere più grande del limite upload_max_filesize del server php.';
-        $messages['qrcode.file.*.file'] = 'Il file deve essere un\'immagine.';
-        $messages['qrcode.file.*.mimes'] = 'Il QR code deve essere in formato png.';
-        $messages['qrcode.file.*.max'] = 'Il QR code non può superare i 2MB.';
-        $messages['qrcode.file.*.dimensions'] = 'Il QR code non può superare i 1000x1000 pixel.';
 
         return $messages;
     }

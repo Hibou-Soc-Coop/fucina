@@ -3,7 +3,7 @@ import Button from '@/components/hibou/Button.vue';
 import DataTable from '@/components/hibou/DataTable.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import PageLayout from '@/layouts/PageLayout.vue';
-import languagesRoutes from '@/routes/languages';
+import languagesRoutes from '@/routes/languages/index';
 import { type BreadcrumbItem } from '@/types';
 import { Language } from '@/types/flexhibition';
 import { Head } from '@inertiajs/vue3';

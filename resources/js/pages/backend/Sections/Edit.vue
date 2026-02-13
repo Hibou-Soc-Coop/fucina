@@ -1,44 +1,65 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
-import { Head, useForm, usePage } from '@inertiajs/vue3';
 import Button from '@/components/hibou/Button.vue';
+import SingleMediaUpload from '@/components/hibou/SingleMediaUpload.vue';
+import TipTap from '@/components/hibou/TipTap.vue';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AppLayout from '@/layouts/AppLayout.vue';
 import sectionsRoutes from '@/routes/sections/index';
 import { type BreadcrumbItem } from '@/types';
-import { type Language, MediaData } from '@/types/flexhibition';
-import { Input } from '@/components/ui/input';
-import TipTap from '@/components/hibou/TipTap.vue';
-import SingleMediaUpload from '@/components/hibou/SingleMediaUpload.vue';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { MediaData, SectionData, type Language } from '@/types/flexhibition';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
+const props = defineProps<{ section: SectionData }>();
+console.log(props.section);
 
 const page = usePage();
 const languages = page.props.languages as Language[];
 const primaryLanguage = page.props.primaryLanguage as Language | null;
-const primaryLanguageCode = primaryLanguage?.code || 'it';
-const currentLang = ref<string>(primaryLanguageCode);
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Sections', href: '/admin/sections' },
-    { title: 'Create', href: sectionsRoutes.create().url },
+    { title: 'Edit', href: '' },
 ];
 
 const emptyByLanguage = Object.fromEntries(languages.map((l) => [l.code, '']));
 
+// Helper to transform array of media to MediaData structure
+const transformMedia = (mediaArray: any[]): MediaData => {
+    const urls: Record<string, string> = {};
+    const titles: Record<string, string> = {}; // Assuming title is stored somewhere or just empty
+
+    mediaArray.forEach(m => {
+        // If media has language property, use it, otherwise use 'default' or primary lang??
+        // Based on Show.vue, custom_properties.language holds the code.
+        const lang = m.custom_properties?.language || 'it'; // Default fallback?
+        urls[lang] = m.url;
+    });
+
+    return {
+        id: null,
+        url: urls,
+        title: titles,
+        file: {},
+    };
+};
+
 const form = useForm({
-    title: { ...emptyByLanguage },
-    subtitle: { ...emptyByLanguage },
-    description: { ...emptyByLanguage },
-    video: null as MediaData | null,
-    audio: null as MediaData | null,
-    image: null as MediaData | null,
+    _method: 'PUT',
+    title: props.section.title || { ...emptyByLanguage },
+    subtitle: props.section.subtitle || { ...emptyByLanguage },
+    description: props.section.description || { ...emptyByLanguage },
+    video: props.section.video ? transformMedia(props.section.video) : { id: null, url: {}, title: {}, file: {} } as MediaData,
+    audio: props.section.audio ? transformMedia(props.section.audio) : { id: null, url: {}, title: {}, file: {} } as MediaData,
+    image: props.section.image ? transformMedia(props.section.image) : { id: null, url: {}, title: {}, file: {} } as MediaData,
 });
 
 
 function submit() {
     form.processing = true;
-    form.post(sectionsRoutes.store().url, {
+    form.post(sectionsRoutes.update.url(props.section.id), {
         onFinish: () => {
             form.processing = false;
         },
@@ -47,12 +68,11 @@ function submit() {
 </script>
 
 <template>
-
-    <Head title="Create Section" />
+    <Head title="Modifica Sezione" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-            <h2 class="text-xl font-semibold mb-4">Nuova sezione</h2>
+            <h2 class="text-xl font-semibold mb-4">Modifica sezione</h2>
 
             <form @submit.prevent="submit">
                 <div class="grid grid-cols-[1fr_4fr] grid-rows-[auto_auto] gap-4">
@@ -95,9 +115,9 @@ function submit() {
                         </Tabs>
                     </div>
                 </div>
-                    <div class="mt-4 text-right">
-                        <Button type="submit" :disabled="form.processing" color-scheme="create">Crea sezione</Button>
-                    </div>
+                <div class="mt-4 text-right">
+                    <Button type="submit" :disabled="form.processing" color-scheme="edit">Salva modifiche</Button>
+                </div>
             </form>
         </div>
     </AppLayout>

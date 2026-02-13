@@ -5,4 +5,4 @@ export const MAX_IMAGE_WIDTH = 1920;
 export const MAX_IMAGE_HEIGHT = 1080;
 
 export const MAX_AUDIO_SIZE = 5 * 1024 * 1024; // 10MB
-export const MAX_VIDEO_SIZE = 20 * 1024 * 1024; // 20MB
+export const MAX_VIDEO_SIZE = 200 * 1024 * 1024; // 20MB

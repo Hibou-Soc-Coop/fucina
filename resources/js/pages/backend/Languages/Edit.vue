@@ -2,7 +2,7 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import PageLayout from '@/layouts/PageLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import languagesRoutes from '@/routes/languages';
+import languagesRoutes from '@/routes/languages/index';
 import { BreadcrumbItem } from '@/types';
 import Button from '@/components/hibou/Button.vue';
 import Label from '@/components/ui/label/Label.vue';

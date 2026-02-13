@@ -18,11 +18,7 @@ console.log(props.sections);
 
 
 const breadcrumbs: BreadcrumbItem[] =  [
-    { title: 'Sections', href: sectionsRoutes.index().url },
-    {
-        title: 'Create',
-        href: sectionsRoutes.create().url,
-    }
+    { title: 'Sections', href: sectionsRoutes.index().url }
 ];
 </script>
 
@@ -34,19 +30,20 @@ const breadcrumbs: BreadcrumbItem[] =  [
             <div class="flex justify-between items-center">
                 <h2 class="text-xl font-semibold">Sections</h2>
                 <Button @click="router.visit(sectionsRoutes.create().url)" colorScheme="create" class="ml-6 h-8" :href="sectionsRoutes.create().url">
-                    Create Section
+                    Nuova sezione
                 </Button>
             </div>
             <div class="gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 <Card
                     v-for="section in sections"
                     :key="section.id"
+                    :route="sectionsRoutes"
+                    :id="section.id"
                     :title="section.title[primaryLanguageCode]"
-                    :excerpt="section.description[primaryLanguageCode]"
-                    :href="sectionsRoutes.edit(section.id).url"
+                    :excerpt="section.description[primaryLanguageCode].substring(0, 100) + '...' "
                     :thumbnail="section.image?.[0]?.url ? `${section.image[0].url}` : '/storage/sample-data/images/placeholder.jpg'"></Card>
                 <div v-if="props.sections.length === 0" class="col-span-full py-8 text-muted-foreground text-center">
-                    No sections found.
+                    Nessuna sezione trovata.
                 </div>
             </div>
         </div>

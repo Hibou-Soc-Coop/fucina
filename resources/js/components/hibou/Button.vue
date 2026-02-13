@@ -9,9 +9,9 @@ const props = defineProps<CustomProps>();
 
 function getColorClasses(scheme?: string) {
   switch (scheme) {
-    case 'show':
-      return 'bg-flex-show-400 hover:bg-flex-show-600 text-white font-semibold';
     case 'create':
+      return 'bg-flex-show-400 hover:bg-flex-show-600 text-white font-semibold';
+    case 'show':
       return 'bg-flex-create-400 hover:bg-flex-create-600 text-white font-semibold';
     case 'save':
       return 'bg-flex-save-400 hover:bg-flex-save-600 text-white font-semibold';

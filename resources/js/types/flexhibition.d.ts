@@ -51,7 +51,7 @@ export interface SectionRecord {
 
 /** Informazioni multilingua su una sezione */
 export interface SectionData {
-    readonly id: string;
+    readonly id: number;
     readonly title: Record<string, string>;
     readonly subtitle: Record<string, string>;
     readonly description: Record<string, string>;
@@ -64,6 +64,7 @@ export interface SectionData {
         id: number | null;
         title: Record<string, string>;
         url: Record<string, string>;
+        custom_properties: Record<string, string>;
     }
     readonly image: Record<string, {
         id: number;
@@ -98,6 +99,21 @@ export interface SectionUploadData extends SectionData {
         title: Record<string, string>;
         url: Record<string, string>;
     }>;
+}
+
+export interface TermRecord {
+    readonly id: number;
+    readonly term: string;
+    readonly definition: string;
+
+
+}
+
+/** Informazioni multilingua su una termine */
+export interface TermData {
+    readonly id: string;
+    readonly term: Record<string, string>;
+    readonly definition: Record<string, string>;
 }
 
 export interface MediaData extends Record<string, any> {

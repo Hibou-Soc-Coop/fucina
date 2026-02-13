@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { router, useForm } from '@inertiajs/vue3';
 import { computed, ref, watch } from 'vue';
 import Button from './Button.vue';
-import mediaRoutes from '@/routes/media';
+import mediaRoutes from '@/routes/media/index';
 
 interface MediaItem {
     id: number;

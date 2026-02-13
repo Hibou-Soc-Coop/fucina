@@ -61,11 +61,12 @@ export interface SectionData {
         title: Record<string, string>;
     }
     readonly audio: {
-        id: number | null;
-        title: Record<string, string>;
-        url: Record<string, string>;
-        custom_properties: Record<string, string>;
-    }
+        [key: string]: {
+            id: number | null;
+            title: string;
+            url: string
+        };
+    };
     readonly image: Record<string, {
         id: number;
         title: Record<string, string>;

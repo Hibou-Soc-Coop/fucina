@@ -82,8 +82,8 @@ const deletesection = () => {
                             <Label class="mb-4 text-base font-semibold"> Audio - {{ language.name }}</Label>
                             <div class="mb-2 gap-5 flex items-center rounded-md border border-input px-3 py-1 text-sm shadow-xs shadow-input">
                                 <div class="w-1/2 items-center rounded-md border border-input px-3 py-1 text-sm shadow-xs shadow-input">
-                                    <audio v-if="props.section.audio?.find(a => a.custom_properties?.language === language.code)"
-                                        :src="props.section.audio.find(a => a.custom_properties?.language === language.code)?.url"
+                                    <audio v-if="props.section.audio[language.code]"
+                                        :src="props.section.audio[language.code].url"
                                         controls class="w-full mt-4" />
                                     </div>
                                 <div class="w-1/2 items-center rounded-md border border-input px-3 py-1 text-sm shadow-xs shadow-input">

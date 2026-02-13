@@ -119,16 +119,17 @@ class SectionController extends Controller
             'title' => $section->getTranslations('title'),
             'subtitle' => $section->getTranslations('subtitle'),
             'description' => $section->getTranslations('description'),
-            'image' => $section->getMedia('image')->map(fn(Media $media) => [
+            'image' => $section->get  Media('image')->map(fn(Media $media) => [
                 'id' => $media->id,
                 'url' => $media->getUrl(),
                 'custom_properties' => $media->custom_properties,
             ]),
             'audio' => $section->getMedia('audio')->map(fn(Media $media) => [
-                'id' => $media->id,
-                'url' => $media->getUrl(),
-                'custom_properties' => $media->custom_properties,
-            ]),
+                $media->getCustomProperty('language') => [
+                    'id' => $media->id,
+                    'url' => $media->getUrl(),
+                ]
+            ])->collapse()->toArray(),
             'video' => $section->getMedia('video')->map(fn(Media $media) => [
                 'id' => $media->id,
                 'url' => $media->getUrl(),

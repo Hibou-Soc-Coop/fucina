@@ -14,11 +14,11 @@ import { Folder, Landmark, Book, LayoutGrid, Image } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
-    {
+    /*{
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
-    },
+    },*/
     {
         title: 'Sezioni',
         href: sectionsRoutes.index(),
@@ -53,9 +53,9 @@ const footerNavItems: NavItem[] = [];
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link :href="dashboard()">
+                        <!-- <Link :href="dashboard()">
                             <AppLogo />
-                        </Link>
+                        </Link> -->
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
